@@ -11,7 +11,7 @@ export default function EmailInbox() {
   function generateRandomEmail() {
     const user = `user${Math.floor(Math.random() * 100000)}`;
     return {
-      address: `${user}@cluemail.com`,
+      address: `${user}@mail.tm`,
       password: `senha${Math.floor(Math.random() * 100000)}`
     };
   }
