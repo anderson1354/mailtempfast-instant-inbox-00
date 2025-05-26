@@ -4,7 +4,7 @@ import { createAccount, login, getMessages } from "@/lib/mailtm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Mail, RefreshCw, Copy, Clock, AlertCircle } from "lucide-react";
+import { Mail, RefreshCw, Copy, Clock, AlertCircle, CheckCircle2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
@@ -28,6 +28,7 @@ export default function EmailInbox({ currentEmail }: EmailInboxProps) {
   const [error, setError] = useState<string | null>(null);
   const [countdown, setCountdown] = useState(3600);
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
+  const [copied, setCopied] = useState(false);
   const { toast } = useToast();
 
   async function initializeAccount() {
@@ -115,6 +116,7 @@ export default function EmailInbox({ currentEmail }: EmailInboxProps) {
     setToken("");
     setError(null);
     setCountdown(3600);
+    setCopied(false);
     initializeAccount();
   }
 
@@ -123,6 +125,9 @@ export default function EmailInbox({ currentEmail }: EmailInboxProps) {
     
     try {
       await navigator.clipboard.writeText(email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      
       toast({
         title: "📋 E-mail copiado!",
         description: "O endereço foi copiado para sua área de transferência.",
@@ -141,7 +146,7 @@ export default function EmailInbox({ currentEmail }: EmailInboxProps) {
       <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg">
         <CardTitle className="flex items-center space-x-2">
           <Mail className="h-5 w-5" />
-          <span>Caixa de Entrada - Mail.tm</span>
+          <span>Caixa de Entrada - dcpa.net</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="p-6 space-y-4">
@@ -155,18 +160,20 @@ export default function EmailInbox({ currentEmail }: EmailInboxProps) {
         )}
 
         {email && !error && (
-          <div className="bg-gray-50 border-2 border-dashed border-blue-200 rounded-lg p-4">
-            <div className="flex items-center justify-between flex-wrap gap-4">
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-gray-600 mb-1">E-mail ativo:</p>
-                <p className="text-lg font-mono font-semibold text-blue-700 break-all">
-                  {email}
-                </p>
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-6 shadow-inner">
+            <div className="text-center space-y-4">
+              <div>
+                <p className="text-sm font-medium text-blue-700 mb-2">📧 Seu E-mail Temporário Ativo</p>
+                <div className="bg-white border-2 border-blue-300 rounded-lg p-4 shadow-sm">
+                  <p className="text-xl font-mono font-bold text-blue-800 break-all tracking-wide">
+                    {email}
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <Badge variant="default" className="px-3 py-1">
-                  <Clock className="h-3 w-3 mr-1" />
-                  {formatTime(countdown)}
+              <div className="flex items-center justify-center">
+                <Badge variant="default" className="px-4 py-2 bg-green-500 hover:bg-green-600">
+                  <Clock className="h-4 w-4 mr-2" />
+                  Expira em {formatTime(countdown)}
                 </Badge>
               </div>
             </div>
@@ -176,11 +183,24 @@ export default function EmailInbox({ currentEmail }: EmailInboxProps) {
         <div className="flex flex-wrap gap-3">
           <Button 
             onClick={handleCopy}
-            className="flex-1 min-w-[140px] bg-blue-600 hover:bg-blue-700"
+            className={`flex-1 min-w-[140px] transition-all duration-200 ${
+              copied 
+                ? 'bg-green-600 hover:bg-green-700' 
+                : 'bg-blue-600 hover:bg-blue-700'
+            }`}
             disabled={!email || isCreatingAccount}
           >
-            <Copy className="h-4 w-4 mr-2" />
-            Copiar E-mail
+            {copied ? (
+              <>
+                <CheckCircle2 className="h-4 w-4 mr-2" />
+                Copiado!
+              </>
+            ) : (
+              <>
+                <Copy className="h-4 w-4 mr-2" />
+                Copiar E-mail
+              </>
+            )}
           </Button>
           <Button 
             onClick={handleNewEmail}

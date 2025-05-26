@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Copy, RefreshCw, Mail, Clock, Shield, Zap } from 'lucide-react';
+import { Copy, RefreshCw, Mail, Clock, Shield, Zap, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -13,18 +13,18 @@ const Index = () => {
   const [currentEmail, setCurrentEmail] = useState('');
   const [timeLeft, setTimeLeft] = useState(3600); // 60 minutes in seconds
   const [isActive, setIsActive] = useState(false);
+  const [copied, setCopied] = useState(false);
   const { toast } = useToast();
 
-  // Generate random email
+  // Generate random email with dcpa.net domain
   const generateEmail = () => {
     const randomString = Math.random().toString(36).substring(2, 12);
-    const domains = ['mailtempfast.com', 'tempmail.fast', 'disposable.email'];
-    const selectedDomain = domains[Math.floor(Math.random() * domains.length)];
-    const newEmail = `${randomString}@${selectedDomain}`;
+    const newEmail = `${randomString}@dcpa.net`;
     
     setCurrentEmail(newEmail);
     setTimeLeft(3600); // Reset to 60 minutes
     setIsActive(true);
+    setCopied(false);
     
     toast({
       title: "✅ E-mail gerado com sucesso!",
@@ -38,6 +38,9 @@ const Index = () => {
     
     try {
       await navigator.clipboard.writeText(currentEmail);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      
       toast({
         title: "📋 E-mail copiado!",
         description: "O endereço foi copiado para sua área de transferência.",
@@ -102,7 +105,7 @@ const Index = () => {
               <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
                 MailTempFast
               </h1>
-              <p className="text-sm text-gray-600">E-mails temporários instantâneos</p>
+              <p className="text-sm text-gray-600">E-mails temporários com @dcpa.net</p>
             </div>
           </div>
         </div>
@@ -115,7 +118,7 @@ const Index = () => {
             Proteja sua <span className="text-blue-600">Privacidade</span> Online
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Gere e-mails temporários instantaneamente. Perfeito para cadastros, testes e proteção contra spam.
+            Gere e-mails temporários instantaneamente com domínio @dcpa.net. Perfeito para cadastros, testes e proteção contra spam.
           </p>
           
           {/* Features */}
@@ -142,28 +145,30 @@ const Index = () => {
               <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg">
                 <CardTitle className="flex items-center space-x-2">
                   <Mail className="h-5 w-5" />
-                  <span>Seu E-mail Temporário</span>
+                  <span>Seu E-mail Temporário @dcpa.net</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6">
                 {currentEmail ? (
                   <div className="space-y-6">
                     {/* Email Display */}
-                    <div className="bg-gray-50 border-2 border-dashed border-blue-200 rounded-lg p-4">
-                      <div className="flex items-center justify-between flex-wrap gap-4">
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm text-gray-600 mb-1">Endereço ativo:</p>
-                          <p className="text-lg font-mono font-semibold text-blue-700 break-all">
-                            {currentEmail}
-                          </p>
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-xl p-6 shadow-inner">
+                      <div className="text-center space-y-4">
+                        <div>
+                          <p className="text-sm font-medium text-blue-700 mb-3">📧 Endereço Ativo</p>
+                          <div className="bg-white border-2 border-blue-400 rounded-lg p-4 shadow-md">
+                            <p className="text-2xl font-mono font-bold text-blue-800 break-all tracking-wide">
+                              {currentEmail}
+                            </p>
+                          </div>
                         </div>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center justify-center">
                           <Badge 
                             variant={isActive ? "default" : "destructive"}
-                            className="px-3 py-1"
+                            className="px-4 py-2 text-sm"
                           >
-                            <Clock className="h-3 w-3 mr-1" />
-                            {isActive ? formatTime(timeLeft) : "Expirado"}
+                            <Clock className="h-4 w-4 mr-2" />
+                            {isActive ? `Expira em ${formatTime(timeLeft)}` : "Expirado"}
                           </Badge>
                         </div>
                       </div>
@@ -173,11 +178,24 @@ const Index = () => {
                     <div className="flex flex-wrap gap-3">
                       <Button 
                         onClick={copyEmail}
-                        className="flex-1 min-w-[140px] bg-blue-600 hover:bg-blue-700"
+                        className={`flex-1 min-w-[140px] transition-all duration-200 ${
+                          copied 
+                            ? 'bg-green-600 hover:bg-green-700' 
+                            : 'bg-blue-600 hover:bg-blue-700'
+                        }`}
                         disabled={!isActive}
                       >
-                        <Copy className="h-4 w-4 mr-2" />
-                        Copiar E-mail
+                        {copied ? (
+                          <>
+                            <CheckCircle2 className="h-4 w-4 mr-2" />
+                            Copiado!
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="h-4 w-4 mr-2" />
+                            Copiar E-mail
+                          </>
+                        )}
                       </Button>
                       <Button 
                         onClick={generateEmail}
@@ -191,17 +209,17 @@ const Index = () => {
 
                     {/* Status Info */}
                     {isActive && (
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                         <div className="flex items-start space-x-3">
-                          <div className="p-1 bg-blue-100 rounded-full">
-                            <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
+                          <div className="p-1 bg-green-100 rounded-full">
+                            <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></div>
                           </div>
                           <div>
-                            <p className="text-sm font-medium text-blue-800">
+                            <p className="text-sm font-medium text-green-800">
                               E-mail ativo e recebendo mensagens
                             </p>
-                            <p className="text-xs text-blue-600 mt-1">
-                              Expira automaticamente em {formatTime(timeLeft)}
+                            <p className="text-xs text-green-600 mt-1">
+                              Domínio confiável @dcpa.net • Expira em {formatTime(timeLeft)}
                             </p>
                           </div>
                         </div>
@@ -252,7 +270,7 @@ const Index = () => {
             <span className="font-semibold">MailTempFast</span>
           </div>
           <p className="text-gray-400 text-sm mb-4">
-            Proteção de privacidade através de e-mails temporários seguros.
+            Proteção de privacidade através de e-mails temporários com @dcpa.net.
           </p>
           <p className="text-xs text-gray-500">
             © 2024 MailTempFast. Todos os direitos reservados. | 

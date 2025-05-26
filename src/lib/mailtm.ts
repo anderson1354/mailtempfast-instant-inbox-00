@@ -1,26 +1,10 @@
 
 export const MAILTM_BASE = "https://api.mail.tm";
 
-export async function getAvailableDomains() {
-  const response = await fetch(`${MAILTM_BASE}/domains`);
-  if (!response.ok) throw new Error("Falha ao obter domínios");
-  
-  const data = await response.json();
-  return data["hydra:member"];
-}
-
 export async function createAccount() {
   try {
-    // Primeiro obter domínios disponíveis
-    const domains = await getAvailableDomains();
-    console.log("Domínios disponíveis:", domains);
-    
-    if (!domains || domains.length === 0) {
-      throw new Error("Nenhum domínio disponível");
-    }
-    
-    // Usar o primeiro domínio disponível
-    const domain = domains[0].domain;
+    // Usar diretamente o domínio @dcpa.net que está funcionando
+    const domain = "dcpa.net";
     const username = `user${Math.floor(Math.random() * 100000)}@${domain}`;
     const password = "MailTemp123!";
 
@@ -106,19 +90,7 @@ export async function getMessages(token: string) {
 }
 
 export async function generateEmail() {
-  try {
-    const domains = await getAvailableDomains();
-    if (!domains || domains.length === 0) {
-      throw new Error("Nenhum domínio disponível");
-    }
-    
-    const randomString = Math.random().toString(36).substring(2, 12);
-    const selectedDomain = domains[Math.floor(Math.random() * domains.length)];
-    return `${randomString}@${selectedDomain.domain}`;
-  } catch (error) {
-    console.error("Erro ao gerar email:", error);
-    // Fallback para um domínio genérico se a API falhar
-    const randomString = Math.random().toString(36).substring(2, 12);
-    return `${randomString}@1secmail.com`;
-  }
+  // Gerar email diretamente com o domínio @dcpa.net que está funcionando
+  const randomString = Math.random().toString(36).substring(2, 12);
+  return `${randomString}@dcpa.net`;
 }
