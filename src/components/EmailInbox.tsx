@@ -1,61 +1,71 @@
-import { useEffect, useState } from "react";
 
-export default function EmailInbox() {
+import { useEffect, useState } from "react";
+import { createAccount, login, getMessages } from "@/lib/mailtm";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Mail, RefreshCw, Copy, Clock } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+
+interface EmailInboxProps {
+  currentEmail: string;
+}
+
+interface Message {
+  id: string;
+  from?: { address: string };
+  subject: string;
+  createdAt: string;
+}
+
+export default function EmailInbox({ currentEmail }: EmailInboxProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [token, setToken] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [countdown, setCountdown] = useState(3600);
+  const { toast } = useToast();
 
-  function generateRandomEmail() {
-    const user = `user${Math.floor(Math.random() * 100000)}`;
-    return {
-      address: `${user}@mail.tm`,
-      password: `senha${Math.floor(Math.random() * 100000)}`
-    };
+  async function initializeAccount() {
+    try {
+      const account = await createAccount();
+      setEmail(account.username);
+      setPassword(account.password);
+      
+      const authToken = await login(account.username, account.password);
+      setToken(authToken);
+      
+      toast({
+        title: "✅ Conta criada com sucesso!",
+        description: "Sua caixa de entrada está pronta para receber e-mails.",
+      });
+    } catch (error) {
+      console.error("Erro ao criar conta:", error);
+      toast({
+        title: "❌ Erro ao criar conta",
+        description: "Não foi possível criar a conta de e-mail.",
+        variant: "destructive",
+      });
+    }
   }
 
-  async function createAccount() {
-    const newAccount = generateRandomEmail();
-    setEmail(newAccount.address);
-    setPassword(newAccount.password);
-
-    await fetch("https://api.mail.tm/accounts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newAccount)
-    });
-
-    login(newAccount);
-  }
-
-  async function login(account) {
-    const res = await fetch("https://api.mail.tm/token", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(account)
-    });
-
-    const data = await res.json();
-    setToken(data.token);
-  }
-
-  async function fetchMessages(authToken) {
-    const res = await fetch("https://api.mail.tm/messages", {
-      headers: {
-        Authorization: `Bearer ${authToken}`
-      }
-    });
-
-    const data = await res.json();
-    setMessages(data["hydra:member"] || []);
-    setLoading(false);
+  async function fetchMessages(authToken: string) {
+    try {
+      const messageList = await getMessages(authToken);
+      setMessages(messageList || []);
+      setLoading(false);
+    } catch (error) {
+      console.error("Erro ao buscar mensagens:", error);
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
-    createAccount();
-  }, []);
+    if (currentEmail) {
+      initializeAccount();
+    }
+  }, [currentEmail]);
 
   useEffect(() => {
     if (token) {
@@ -72,7 +82,7 @@ export default function EmailInbox() {
     return () => clearInterval(timer);
   }, []);
 
-  function formatTime(seconds) {
+  function formatTime(seconds: number) {
     const m = String(Math.floor(seconds / 60)).padStart(2, "0");
     const s = String(seconds % 60).padStart(2, "0");
     return `${m}:${s}`;
@@ -82,57 +92,105 @@ export default function EmailInbox() {
     setMessages([]);
     setToken("");
     setCountdown(3600);
-    createAccount();
+    initializeAccount();
   }
 
-  function handleCopy() {
-    navigator.clipboard.writeText(email);
-    alert("E-mail copiado!");
+  async function handleCopy() {
+    if (!email) return;
+    
+    try {
+      await navigator.clipboard.writeText(email);
+      toast({
+        title: "📋 E-mail copiado!",
+        description: "O endereço foi copiado para sua área de transferência.",
+      });
+    } catch (err) {
+      toast({
+        title: "❌ Erro ao copiar",
+        description: "Não foi possível copiar o e-mail.",
+        variant: "destructive",
+      });
+    }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-white via-sky-100 to-sky-200 p-6 flex flex-col items-center">
-      <div className="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-6 space-y-4">
-        <h1 className="text-2xl font-bold text-gray-800 text-center">📬 MailTempFast</h1>
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="text-lg font-mono text-blue-700 bg-blue-50 px-3 py-2 rounded">
-            {email || "Gerando..."}
+    <Card className="shadow-lg border-blue-100">
+      <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg">
+        <CardTitle className="flex items-center space-x-2">
+          <Mail className="h-5 w-5" />
+          <span>Caixa de Entrada - Mail.tm</span>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="p-6 space-y-4">
+        {email && (
+          <div className="bg-gray-50 border-2 border-dashed border-blue-200 rounded-lg p-4">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-gray-600 mb-1">E-mail ativo:</p>
+                <p className="text-lg font-mono font-semibold text-blue-700 break-all">
+                  {email}
+                </p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Badge variant="default" className="px-3 py-1">
+                  <Clock className="h-3 w-3 mr-1" />
+                  {formatTime(countdown)}
+                </Badge>
+              </div>
+            </div>
           </div>
-          <button
+        )}
+
+        <div className="flex flex-wrap gap-3">
+          <Button 
             onClick={handleCopy}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow"
+            className="flex-1 min-w-[140px] bg-blue-600 hover:bg-blue-700"
+            disabled={!email}
           >
-            Copiar
-          </button>
-        </div>
-        <div className="flex justify-between items-center">
-          <span className="text-sm text-gray-600">⏳ Expira em: <strong>{formatTime(countdown)}</strong></span>
-          <button
+            <Copy className="h-4 w-4 mr-2" />
+            Copiar E-mail
+          </Button>
+          <Button 
             onClick={handleNewEmail}
-            className="bg-gray-800 hover:bg-gray-700 text-white px-3 py-1 rounded"
+            variant="outline"
+            className="flex-1 min-w-[140px] border-blue-600 text-blue-600 hover:bg-blue-50"
           >
-            🔁 Novo e-mail
-          </button>
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Novo E-mail
+          </Button>
         </div>
+
         <div className="border-t pt-4">
-          <h2 className="text-lg font-semibold text-gray-700 mb-2">Caixa de Entrada</h2>
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">Mensagens Recebidas</h3>
           {loading && <p className="text-sm text-gray-500">Carregando mensagens...</p>}
           {!loading && messages.length === 0 && (
-            <p className="text-sm text-gray-500 italic">Nenhuma mensagem recebida ainda.</p>
+            <div className="text-center py-8">
+              <Mail className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+              <p className="text-sm text-gray-500 italic">Nenhuma mensagem recebida ainda.</p>
+              <p className="text-xs text-gray-400 mt-1">As mensagens aparecerão aqui automaticamente.</p>
+            </div>
           )}
           <div className="space-y-3">
             {messages.map((msg) => (
-              <div key={msg.id} className="p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm">
-                <p className="text-sm text-gray-800"><strong>De:</strong> {msg.from?.address}</p>
-                <p className="text-sm text-gray-800"><strong>Assunto:</strong> {msg.subject}</p>
+              <div key={msg.id} className="p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-gray-800">
+                      <strong>De:</strong> {msg.from?.address || "Desconhecido"}
+                    </p>
+                    <p className="text-sm text-gray-700 mt-1">
+                      <strong>Assunto:</strong> {msg.subject || "Sem assunto"}
+                    </p>
+                  </div>
+                  <Badge variant="outline" className="text-xs">
+                    {new Date(msg.createdAt).toLocaleTimeString()}
+                  </Badge>
+                </div>
               </div>
             ))}
           </div>
         </div>
-        <div className="mt-6 border-t pt-4 text-center text-xs text-gray-400">
-          Área para anúncio do Google AdSense
-        </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

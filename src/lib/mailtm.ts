@@ -1,3 +1,4 @@
+
 export const MAILTM_BASE = "https://api.mail.tm";
 
 export async function createAccount() {
@@ -35,4 +36,11 @@ export async function getMessages(token: string) {
   if (!res.ok) throw new Error("Erro ao buscar mensagens");
   const data = await res.json();
   return data["hydra:member"];
+}
+
+export async function generateEmail() {
+  const randomString = Math.random().toString(36).substring(2, 12);
+  const domains = ['mail.tm'];
+  const selectedDomain = domains[Math.floor(Math.random() * domains.length)];
+  return `${randomString}@${selectedDomain}`;
 }
