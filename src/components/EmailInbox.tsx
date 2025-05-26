@@ -4,8 +4,9 @@ import { createAccount, login, getMessages } from "@/lib/mailtm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Mail, RefreshCw, Copy, Clock } from "lucide-react";
+import { Mail, RefreshCw, Copy, Clock, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface EmailInboxProps {
   currentEmail: string;
@@ -24,15 +25,26 @@ export default function EmailInbox({ currentEmail }: EmailInboxProps) {
   const [token, setToken] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [countdown, setCountdown] = useState(3600);
+  const [isCreatingAccount, setIsCreatingAccount] = useState(false);
   const { toast } = useToast();
 
   async function initializeAccount() {
+    if (isCreatingAccount) return;
+    
     try {
+      setIsCreatingAccount(true);
+      setError(null);
+      setLoading(true);
+      
+      console.log("Iniciando criação de conta...");
+      
       const account = await createAccount();
       setEmail(account.username);
       setPassword(account.password);
       
+      console.log("Tentando fazer login...");
       const authToken = await login(account.username, account.password);
       setToken(authToken);
       
@@ -40,24 +52,34 @@ export default function EmailInbox({ currentEmail }: EmailInboxProps) {
         title: "✅ Conta criada com sucesso!",
         description: "Sua caixa de entrada está pronta para receber e-mails.",
       });
+      
+      setError(null);
     } catch (error) {
       console.error("Erro ao criar conta:", error);
+      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
+      setError(errorMessage);
+      
       toast({
         title: "❌ Erro ao criar conta",
-        description: "Não foi possível criar a conta de e-mail.",
+        description: errorMessage,
         variant: "destructive",
       });
+    } finally {
+      setIsCreatingAccount(false);
+      setLoading(false);
     }
   }
 
   async function fetchMessages(authToken: string) {
     try {
+      console.log("Buscando mensagens com token...");
       const messageList = await getMessages(authToken);
       setMessages(messageList || []);
-      setLoading(false);
+      setError(null);
     } catch (error) {
       console.error("Erro ao buscar mensagens:", error);
-      setLoading(false);
+      const errorMessage = error instanceof Error ? error.message : "Erro ao buscar mensagens";
+      setError(errorMessage);
     }
   }
 
@@ -91,6 +113,7 @@ export default function EmailInbox({ currentEmail }: EmailInboxProps) {
   function handleNewEmail() {
     setMessages([]);
     setToken("");
+    setError(null);
     setCountdown(3600);
     initializeAccount();
   }
@@ -122,7 +145,16 @@ export default function EmailInbox({ currentEmail }: EmailInboxProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="p-6 space-y-4">
-        {email && (
+        {error && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              {error}
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {email && !error && (
           <div className="bg-gray-50 border-2 border-dashed border-blue-200 rounded-lg p-4">
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div className="flex-1 min-w-0">
@@ -145,7 +177,7 @@ export default function EmailInbox({ currentEmail }: EmailInboxProps) {
           <Button 
             onClick={handleCopy}
             className="flex-1 min-w-[140px] bg-blue-600 hover:bg-blue-700"
-            disabled={!email}
+            disabled={!email || isCreatingAccount}
           >
             <Copy className="h-4 w-4 mr-2" />
             Copiar E-mail
@@ -154,16 +186,17 @@ export default function EmailInbox({ currentEmail }: EmailInboxProps) {
             onClick={handleNewEmail}
             variant="outline"
             className="flex-1 min-w-[140px] border-blue-600 text-blue-600 hover:bg-blue-50"
+            disabled={isCreatingAccount}
           >
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Novo E-mail
+            <RefreshCw className={`h-4 w-4 mr-2 ${isCreatingAccount ? 'animate-spin' : ''}`} />
+            {isCreatingAccount ? 'Criando...' : 'Novo E-mail'}
           </Button>
         </div>
 
         <div className="border-t pt-4">
           <h3 className="text-lg font-semibold text-gray-700 mb-4">Mensagens Recebidas</h3>
-          {loading && <p className="text-sm text-gray-500">Carregando mensagens...</p>}
-          {!loading && messages.length === 0 && (
+          {loading && !error && <p className="text-sm text-gray-500">Carregando mensagens...</p>}
+          {!loading && !error && messages.length === 0 && (
             <div className="text-center py-8">
               <Mail className="h-12 w-12 text-gray-300 mx-auto mb-3" />
               <p className="text-sm text-gray-500 italic">Nenhuma mensagem recebida ainda.</p>
