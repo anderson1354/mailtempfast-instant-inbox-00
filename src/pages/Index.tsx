@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import AdBanner from '@/components/AdBanner';
+import EmailInbox from '@/components/EmailInbox';
 import PrivacyNotice from '@/components/PrivacyNotice';
 
 const Index = () => {
@@ -144,7 +145,7 @@ const Index = () => {
               <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg">
                 <CardTitle className="flex items-center space-x-2">
                   <Mail className="h-5 w-5" />
-                  <span>Seu E-mail Temporário Aqui</span>
+                  <span>Seu E-mail Temporário @dcpa.net</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6">
@@ -247,6 +248,13 @@ const Index = () => {
             <PrivacyNotice />
           </div>
         </div>
+
+        {/* Email Inbox Section */}
+        {currentEmail && isActive && (
+          <div className="mt-12">
+            <EmailInbox currentEmail={currentEmail} />
+          </div>
+        )}
 
         {/* AdSense Banner Bottom */}
         <div className="mt-12">
