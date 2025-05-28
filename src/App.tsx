@@ -7,6 +7,7 @@ import About from "./pages/About";
 
 const App = () => (
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
@@ -21,6 +22,8 @@ const App = () => (
     </TooltipProvider>
   </QueryClientProvider>
 =======
+=======
+>>>>>>> Stashed changes
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Index />} />
@@ -30,6 +33,9 @@ const App = () => (
       <Route path="*" element={<NotFound />} />
     </Routes>
   </BrowserRouter>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 );
 
