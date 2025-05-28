@@ -269,7 +269,11 @@ const Index = () => {
             <span className="ml-2">SSL Ativo • Sem logs • 100% Privado</span>
           </p>
         </div>
-      </footer>
+      </footer <div className="flex justify-center space-x-4 mt-4 text-sm text-blue-200">
+  <a href="/sobre" className="hover:underline">Sobre</a>
+  <a href="/privacidade" className="hover:underline">Privacidade</a>
+  <a href="/contato" className="hover:underline">Contato</a>
+</div>
     </div>
   );
 };
