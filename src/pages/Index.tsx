@@ -270,7 +270,11 @@ const Index = () => {
   <span className="ml-2">SSL Ativo • Sem logs • 100% Privado</span>
 </p>
         </div>
-      </footer>
+      </footer <p className="text-sm mt-4">
+  <a href="/sobre" className="text-blue-300 hover:underline mr-4">Sobre</a>
+  <a href="/privacidade" className="text-blue-300 hover:underline mr-4">Privacidade</a>
+  <a href="/contato" className="text-blue-300 hover:underline">Contato</a>
+</p>
     </div>
   );
 };
