@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import Privacy from "./pages/Privacy";
-import Contact from "./pages/Contact";
-import About from "./pages/About";
+import Privacy from "./pages/Privacidade";
+import Contact from "./pages/Contato";
+import About from "./pages/Sobre";
 
 const App = () => (
   <BrowserRouter>
