@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Copy, RefreshCw, Mail, Clock, Shield, Zap, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -6,40 +5,35 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import AdBanner from '@/components/AdBanner';
+import EmailInbox from '@/components/EmailInbox';
 import PrivacyNotice from '@/components/PrivacyNotice';
 
 const Index = () => {
   const [currentEmail, setCurrentEmail] = useState('');
-  const [timeLeft, setTimeLeft] = useState(3600); // 60 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(3600);
   const [isActive, setIsActive] = useState(false);
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
 
-  // Generate random email with dcpa.net domain
   const generateEmail = () => {
     const randomString = Math.random().toString(36).substring(2, 12);
     const newEmail = `${randomString}@dcpa.net`;
-    
     setCurrentEmail(newEmail);
-    setTimeLeft(3600); // Reset to 60 minutes
+    setTimeLeft(3600);
     setIsActive(true);
     setCopied(false);
-    
     toast({
       title: "✅ E-mail gerado com sucesso!",
       description: "Seu e-mail temporário está pronto para uso.",
     });
   };
 
-  // Copy email to clipboard
   const copyEmail = async () => {
     if (!currentEmail) return;
-    
     try {
       await navigator.clipboard.writeText(currentEmail);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-      
       toast({
         title: "📋 E-mail copiado!",
         description: "O endereço foi copiado para sua área de transferência.",
@@ -53,10 +47,8 @@ const Index = () => {
     }
   };
 
-  // Timer countdown
   useEffect(() => {
     if (!isActive || timeLeft <= 0) return;
-
     const timer = setInterval(() => {
       setTimeLeft(prev => {
         if (prev <= 1) {
@@ -72,28 +64,23 @@ const Index = () => {
         return prev - 1;
       });
     }, 1000);
-
     return () => clearInterval(timer);
   }, [isActive, timeLeft, toast]);
 
-  // Format time display
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
-  // Generate initial email on first load
   useEffect(() => {
     generateEmail();
   }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
-      {/* AdSense Banner Top */}
       <AdBanner type="horizontal" position="top" />
-      
-      {/* Header */}
+
       <header className="bg-white shadow-sm border-b border-blue-100">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-center space-x-3">
@@ -111,7 +98,6 @@ const Index = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        {/* Hero Section */}
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Proteja sua <span className="text-blue-600">Privacidade</span> Online
@@ -119,8 +105,6 @@ const Index = () => {
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
             Gere e-mails temporários instantaneamente com domínio @dcpa.net. Perfeito para cadastros, testes e proteção contra spam.
           </p>
-          
-          {/* Features */}
           <div className="flex flex-wrap justify-center gap-4 mb-8">
             <Badge variant="secondary" className="px-4 py-2 text-sm">
               <Zap className="h-4 w-4 mr-2" />
@@ -138,28 +122,24 @@ const Index = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Email Generator Section */}
           <div className="lg:col-span-2">
             <Card className="shadow-lg border-blue-100 hover:shadow-xl transition-shadow duration-300">
               <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg">
                 <CardTitle className="flex items-center space-x-2">
                   <Mail className="h-5 w-5" />
-                  <span>Seu E-mail Temporário Aqui</span>
+                  <span>Seu E-mail Temporário @dcpa.net</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6">
                 {currentEmail ? (
                   <div className="space-y-6">
-                    {/* Email Display */}
                     <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-xl p-6 shadow-inner">
                       <div className="text-center space-y-4">
-                        <div>
-                          <p className="text-sm font-medium text-blue-700 mb-3">📧 Endereço Ativo</p>
-                          <div className="bg-white border-2 border-blue-400 rounded-lg p-4 shadow-md">
-                            <p className="text-2xl font-mono font-bold text-blue-800 break-all tracking-wide">
-                              {currentEmail}
-                            </p>
-                          </div>
+                        <p className="text-sm font-medium text-blue-700 mb-3">📧 Endereço Ativo</p>
+                        <div className="bg-white border-2 border-blue-400 rounded-lg p-4 shadow-md">
+                          <p className="text-2xl font-mono font-bold text-blue-800 break-all tracking-wide">
+                            {currentEmail}
+                          </p>
                         </div>
                         <div className="flex items-center justify-center">
                           <Badge 
@@ -173,7 +153,6 @@ const Index = () => {
                       </div>
                     </div>
 
-                    {/* Action Buttons */}
                     <div className="flex flex-wrap gap-3">
                       <Button 
                         onClick={copyEmail}
@@ -206,7 +185,6 @@ const Index = () => {
                       </Button>
                     </div>
 
-                    {/* Status Info */}
                     {isActive && (
                       <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                         <div className="flex items-start space-x-3">
@@ -241,20 +219,24 @@ const Index = () => {
             </Card>
           </div>
 
-          {/* AdSense Sidebar */}
           <div className="space-y-6">
             <AdBanner type="rectangle" position="sidebar" />
             <PrivacyNotice />
           </div>
         </div>
 
-        {/* AdSense Banner Bottom */}
+        {currentEmail && isActive && (
+          <div className="mt-12">
+            <EmailInbox currentEmail={currentEmail} />
+          </div>
+        )}
+
         <div className="mt-12">
           <AdBanner type="horizontal" position="bottom" />
         </div>
       </main>
 
-      {/* Footer */}
+      {/* ✅ Footer atualizado com links */}
       <footer className="bg-gray-900 text-white py-8 mt-16">
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
@@ -264,17 +246,17 @@ const Index = () => {
           <p className="text-gray-400 text-sm mb-4">
             Proteção de privacidade através de e-mails temporários com @dcpa.net.
           </p>
-         <p className="text-xs text-gray-500">
-  © 2024 MailTempFast. Todos os direitos reservados. |
-  <a href="/sobre" className="underline hover:text-white ml-1">Sobre</a>
-  <span className="ml-2">SSL Ativo • Sem logs • 100% Privado</span>
-</p>
+          <p className="text-xs text-gray-500">
+            © 2024 MailTempFast. Todos os direitos reservados. |
+            <span className="ml-2">SSL Ativo • Sem logs • 100% Privado</span>
+          </p>
+          <p className="text-sm mt-4">
+            <a href="/sobre" className="text-blue-300 hover:underline mr-4">Sobre</a>
+            <a href="/privacidade" className="text-blue-300 hover:underline mr-4">Privacidade</a>
+            <a href="/contato" className="text-blue-300 hover:underline">Contato</a>
+          </p>
         </div>
-      </footer <p className="text-sm mt-4">
-  <a href="/sobre" className="text-blue-300 hover:underline mr-4">Sobre</a>
-  <a href="/privacidade" className="text-blue-300 hover:underline mr-4">Privacidade</a>
-  <a href="/contato" className="text-blue-300 hover:underline">Contato</a>
-</p>
+      </footer>
     </div>
   );
 };
