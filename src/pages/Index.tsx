@@ -264,10 +264,11 @@ const Index = () => {
           <p className="text-gray-400 text-sm mb-4">
             Proteção de privacidade através de e-mails temporários com @dcpa.net.
           </p>
-          <p className="text-xs text-gray-500">
-            © 2024 MailTempFast. Todos os direitos reservados. | 
-            <span className="ml-2">SSL Ativo • Sem logs • 100% Privado</span>
-          </p>
+         <p className="text-xs text-gray-500">
+  © 2024 MailTempFast. Todos os direitos reservados. |
+  <a href="/sobre" className="underline hover:text-white ml-1">Sobre</a>
+  <span className="ml-2">SSL Ativo • Sem logs • 100% Privado</span>
+</p>
         </div>
       </footer>
     </div>
