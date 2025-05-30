@@ -2,9 +2,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import Privacy from "./pages/Privacy";
-import Contact from "./pages/Contact";
+import Privacy from "./pages/Privacidade";
+import Contact from "./pages/Contato";
 import About from "./pages/Sobre";
+import Blog from "./pages/Blog";
 
 const App = () => (
   <BrowserRouter>
@@ -13,6 +14,7 @@ const App = () => (
       <Route path="/privacidade" element={<Privacy />} />
       <Route path="/contato" element={<Contact />} />
       <Route path="/sobre" element={<About />} />
+      <Route path="/blog" element={<Blog />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   </BrowserRouter>
