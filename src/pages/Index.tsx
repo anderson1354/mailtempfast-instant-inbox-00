@@ -217,6 +217,13 @@ const Index = () => {
                 )}
               </CardContent>
             </Card>
+
+            {/* Caixa de entrada posicionada logo abaixo do gerador */}
+            {currentEmail && isActive && (
+              <div className="mt-8">
+                <EmailInbox currentEmail={currentEmail} />
+              </div>
+            )}
           </div>
 
           <div className="space-y-6">
@@ -225,18 +232,12 @@ const Index = () => {
           </div>
         </div>
 
-        {currentEmail && isActive && (
-          <div className="mt-12">
-            <EmailInbox currentEmail={currentEmail} />
-          </div>
-        )}
-
         <div className="mt-12">
           <AdBanner type="horizontal" position="bottom" />
         </div>
       </main>
 
-      {/* ✅ Footer atualizado com links */}
+      {/* Footer atualizado com links funcionais */}
       <footer className="bg-gray-900 text-white py-8 mt-16">
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
@@ -246,14 +247,34 @@ const Index = () => {
           <p className="text-gray-400 text-sm mb-4">
             Proteção de privacidade através de e-mails temporários com @dcpa.net.
           </p>
-          <p className="text-xs text-gray-500">
-            © 2024 MailTempFast. Todos os direitos reservados. |
-            <span className="ml-2">SSL Ativo • Sem logs • 100% Privado</span>
-          </p>
-          <p className="text-sm mt-4">
-            <a href="/sobre" className="text-blue-300 hover:underline mr-4">Sobre</a>
-            <a href="/privacidade" className="text-blue-300 hover:underline mr-4">Privacidade</a>
-            <a href="/contato" className="text-blue-300 hover:underline">Contato</a>
+          
+          {/* Links de navegação do rodapé */}
+          <div className="flex flex-wrap justify-center gap-6 mb-4">
+            <a 
+              href="/sobre" 
+              className="text-blue-300 hover:text-blue-200 transition-colors text-sm font-medium hover:underline"
+            >
+              Sobre
+            </a>
+            <a 
+              href="/privacidade" 
+              className="text-blue-300 hover:text-blue-200 transition-colors text-sm font-medium hover:underline"
+            >
+              Privacidade
+            </a>
+            <a 
+              href="/contato" 
+              className="text-blue-300 hover:text-blue-200 transition-colors text-sm font-medium hover:underline"
+            >
+              Contato
+            </a>
+          </div>
+
+          <p className="text-xs text-gray-500 border-t border-gray-700 pt-4">
+            © 2024 MailTempFast. Todos os direitos reservados.
+            <span className="block sm:inline sm:ml-2 mt-1 sm:mt-0">
+              SSL Ativo • Sem logs • 100% Privado
+            </span>
           </p>
         </div>
       </footer>
