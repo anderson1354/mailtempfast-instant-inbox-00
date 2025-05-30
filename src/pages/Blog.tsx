@@ -1,8 +1,8 @@
-
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Mail, Shield, Zap, ArrowRight } from "lucide-react";
+import Header from "@/components/Header";
 
 export default function Blog() {
   const articles = [
@@ -52,6 +52,8 @@ export default function Blog() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-pink-50">
+      <Header />
+      
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-6xl mx-auto">
           {/* Header */}

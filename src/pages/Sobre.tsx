@@ -1,11 +1,13 @@
-
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield, Mail, CheckCircle } from "lucide-react";
+import Header from "@/components/Header";
 
 export default function Sobre() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50">
+      <Header />
+      
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
           {/* Header */}

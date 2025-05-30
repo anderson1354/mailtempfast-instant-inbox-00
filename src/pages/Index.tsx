@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Copy, RefreshCw, Mail, Clock, Shield, Zap, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,6 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import AdBanner from '@/components/AdBanner';
 import EmailInbox from '@/components/EmailInbox';
 import PrivacyNotice from '@/components/PrivacyNotice';
+import Header from '@/components/Header';
 import { mailTmService } from '@/services/mailtm';
 
 const Index = () => {
@@ -114,21 +114,7 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
       <AdBanner type="horizontal" position="top" />
 
-      <header className="bg-white shadow-sm border-b border-blue-100">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-center space-x-3">
-            <div className="p-2 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg">
-              <Mail className="h-8 w-8 text-white" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-                MailTempFast
-              </h1>
-              <p className="text-sm text-gray-600">E-mails temporários reais com mail.tm</p>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main className="container mx-auto px-4 py-8">
         <div className="text-center mb-12">
