@@ -10,9 +10,9 @@ export default function Header() {
           <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
             <div className="p-2 bg-white border-2 border-white rounded-lg shadow-sm">
               <img 
-                src="/lovable-uploads/5d6c4150-eda5-4210-941d-3e4db60ede2c.png" 
+                src="/lovable-uploads/edc7ce4e-c1dc-4bb6-8bb1-90ee1520903f.png" 
                 alt="MailTempFast Logo" 
-                className="h-12 w-12 object-contain"
+                className="h-14 w-14 object-contain"
               />
             </div>
             <div>
