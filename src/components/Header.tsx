@@ -1,6 +1,5 @@
 
 import React from "react";
-import { Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Header() {
@@ -10,7 +9,11 @@ export default function Header() {
         <div className="flex items-center justify-center space-x-3">
           <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
             <div className="p-2 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg">
-              <Mail className="h-8 w-8 text-white" />
+              <img 
+                src="/lovable-uploads/033ba22b-37c2-4d5b-8309-330e142dec04.png" 
+                alt="MailTempFast Logo" 
+                className="h-8 w-8 object-contain"
+              />
             </div>
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
