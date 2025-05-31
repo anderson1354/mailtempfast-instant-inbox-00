@@ -8,7 +8,7 @@ export default function Header() {
       <div className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-center space-x-3">
           <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-            <div className="p-2 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg">
+            <div className="p-2 bg-white border-2 border-white rounded-lg shadow-sm">
               <img 
                 src="/lovable-uploads/033ba22b-37c2-4d5b-8309-330e142dec04.png" 
                 alt="MailTempFast Logo" 
