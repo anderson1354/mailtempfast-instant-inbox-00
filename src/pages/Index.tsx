@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Copy, RefreshCw, Mail, Clock, Shield, Zap, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -156,7 +157,7 @@ const Index = () => {
                       <div className="text-center space-y-4">
                         <p className="text-sm font-medium text-blue-700 mb-3">📧 Endereço Ativo</p>
                         <div className="bg-white border-2 border-blue-400 rounded-lg p-4 shadow-md">
-                          <p className="text-2xl font-mono font-bold text-blue-800 break-all tracking-wide">
+                          <p className="text-2xl font-semibold text-blue-800 break-all">
                             {currentEmail}
                           </p>
                         </div>
