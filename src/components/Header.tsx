@@ -12,7 +12,7 @@ export default function Header() {
               <img 
                 src="/lovable-uploads/edc7ce4e-c1dc-4bb6-8bb1-90ee1520903f.png" 
                 alt="MailTempFast Logo" 
-                className="h-14 w-14 object-contain"
+                className="h-16 w-16 object-contain"
               />
             </div>
             <div>
