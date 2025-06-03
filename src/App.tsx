@@ -6,6 +6,9 @@ import Privacy from "./pages/Privacidade";
 import Contact from "./pages/Contato";
 import About from "./pages/Sobre";
 import Blog from "./pages/Blog";
+import ComoUsar from "./pages/blog/ComoUsar";
+import EviteSpam from "./pages/blog/EviteSpam";
+import PorqueProteger from "./pages/blog/PorqueProteger";
 
 const App = () => (
   <BrowserRouter>
@@ -15,6 +18,9 @@ const App = () => (
       <Route path="/contato" element={<Contact />} />
       <Route path="/sobre" element={<About />} />
       <Route path="/blog" element={<Blog />} />
+      <Route path="/blog/como-usar" element={<ComoUsar />} />
+      <Route path="/blog/evite-spam" element={<EviteSpam />} />
+      <Route path="/blog/por-que-proteger" element={<PorqueProteger />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   </BrowserRouter>

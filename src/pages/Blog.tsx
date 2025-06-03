@@ -1,29 +1,37 @@
+
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Mail, Shield, Zap, ArrowRight } from "lucide-react";
+import { Mail, Shield, Zap, ArrowRight, Calendar } from "lucide-react";
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 
 export default function Blog() {
   const articles = [
     {
       id: 1,
-      title: "O que é um e-mail temporário?",
-      intro: "Descubra como os e-mails temporários funcionam e por que eles são essenciais para proteger sua privacidade online. Entenda as vantagens de usar endereços descartáveis em cadastros e verificações.",
+      title: "Como usar e-mails temporários com segurança",
+      intro: "Descubra como usar e-mails temporários de forma segura e eficaz. Aprenda as melhores práticas, dicas de segurança e como maximizar a proteção da sua privacidade online.",
+      slug: "como-usar",
+      date: "3 de Junho de 2024",
       icon: Mail,
       color: "blue"
     },
     {
       id: 2,
-      title: "5 vantagens de usar e-mails descartáveis",
-      intro: "Explore os principais benefícios dos e-mails temporários: proteção contra spam, privacidade aprimorada, testes seguros, organização de contas e muito mais. Saiba como otimizar seu uso.",
+      title: "Evite spam com e-mails descartáveis",
+      intro: "Aprenda como os e-mails descartáveis podem ser sua melhor defesa contra spam e mensagens indesejadas. Mantenha sua caixa de entrada principal sempre limpa e organizada.",
+      slug: "evite-spam",
+      date: "2 de Junho de 2024",
       icon: Shield,
       color: "green"
     },
     {
       id: 3,
-      title: "Como evitar spam usando e-mails temporários",
-      intro: "Aprenda estratégias eficazes para manter sua caixa de entrada principal limpa e organizada. Dicas práticas para usar e-mails temporários em diferentes situações do dia a dia.",
+      title: "Por que proteger sua caixa de entrada?",
+      intro: "Entenda a importância de proteger seu e-mail pessoal e por que você não deve usá-lo em cadastros de risco ou sites pouco confiáveis. Proteja sua privacidade digital.",
+      slug: "por-que-proteger",
+      date: "1 de Junho de 2024",
       icon: Zap,
       color: "purple"
     }
@@ -82,18 +90,24 @@ export default function Blog() {
                     <CardTitle className="text-xl text-gray-800 leading-tight">
                       {article.title}
                     </CardTitle>
+                    <div className="flex items-center gap-2 text-sm text-gray-600 mt-2">
+                      <Calendar className="h-4 w-4" />
+                      <span>{article.date}</span>
+                    </div>
                   </CardHeader>
                   <CardContent className="p-6 flex flex-col h-full">
                     <p className="text-gray-700 leading-relaxed mb-6 flex-grow">
                       {article.intro}
                     </p>
-                    <Button 
-                      className={`w-full ${colors.button} text-white transition-colors group`}
-                      variant="default"
-                    >
-                      Ler mais
-                      <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </Button>
+                    <Link to={`/blog/${article.slug}`} className="w-full">
+                      <Button 
+                        className={`w-full ${colors.button} text-white transition-colors group`}
+                        variant="default"
+                      >
+                        Ler mais
+                        <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </Link>
                   </CardContent>
                 </Card>
               );
@@ -109,12 +123,14 @@ export default function Blog() {
               <p className="text-xl opacity-90 mb-6">
                 Experimente nossos e-mails temporários gratuitos agora mesmo!
               </p>
-              <Button 
-                className="bg-white text-orange-600 hover:bg-gray-100 font-semibold px-8 py-3 text-lg"
-                variant="secondary"
-              >
-                Criar E-mail Temporário
-              </Button>
+              <Link to="/">
+                <Button 
+                  className="bg-white text-orange-600 hover:bg-gray-100 font-semibold px-8 py-3 text-lg"
+                  variant="secondary"
+                >
+                  Criar E-mail Temporário
+                </Button>
+              </Link>
             </CardContent>
           </Card>
         </div>
