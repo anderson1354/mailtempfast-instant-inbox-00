@@ -20,12 +20,18 @@ const Index = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
 
+  // Função para scroll para o topo
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const generateRandomPassword = () => {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
   };
 
   const generateEmail = async () => {
     setIsGenerating(true);
+    scrollToTop(); // Scroll para o topo ao gerar novo email
     try {
       // Buscar domínios disponíveis
       const domains = await mailTmService.getDomains();
@@ -63,6 +69,7 @@ const Index = () => {
 
   const copyEmail = async () => {
     if (!currentEmail) return;
+    scrollToTop(); // Scroll para o topo ao copiar email
     try {
       await navigator.clipboard.writeText(currentEmail);
       setCopied(true);
@@ -118,25 +125,6 @@ const Index = () => {
       <Header />
 
       <main className="container mx-auto px-4 py-8">
-        {/* Logo e Nome Central - Novo */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center space-x-4 mb-6">
-            <div className="p-3 bg-white border-4 border-blue-200 rounded-2xl shadow-lg">
-              <img 
-                src="/lovable-uploads/edc7ce4e-c1dc-4bb6-8bb1-90ee1520903f.png" 
-                alt="MailTempFast Logo" 
-                className="h-20 w-20 object-contain"
-              />
-            </div>
-            <div className="text-left">
-              <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-                MailTempFast
-              </h1>
-              <p className="text-lg text-gray-600 font-medium">E-mails temporários reais</p>
-            </div>
-          </div>
-        </div>
-
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Proteja sua <span className="text-blue-600">Privacidade</span> Online
@@ -293,18 +281,21 @@ const Index = () => {
           <div className="flex flex-wrap justify-center gap-6 mb-4">
             <a 
               href="/sobre" 
+              onClick={scrollToTop}
               className="text-blue-300 hover:text-blue-200 transition-colors text-sm font-medium hover:underline"
             >
               Sobre
             </a>
             <a 
               href="/privacidade" 
+              onClick={scrollToTop}
               className="text-blue-300 hover:text-blue-200 transition-colors text-sm font-medium hover:underline"
             >
               Privacidade
             </a>
             <a 
               href="/contato" 
+              onClick={scrollToTop}
               className="text-blue-300 hover:text-blue-200 transition-colors text-sm font-medium hover:underline"
             >
               Contato
