@@ -118,6 +118,25 @@ const Index = () => {
       <Header />
 
       <main className="container mx-auto px-4 py-8">
+        {/* Logo e Nome Central - Novo */}
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center space-x-4 mb-6">
+            <div className="p-3 bg-white border-4 border-blue-200 rounded-2xl shadow-lg">
+              <img 
+                src="/lovable-uploads/edc7ce4e-c1dc-4bb6-8bb1-90ee1520903f.png" 
+                alt="MailTempFast Logo" 
+                className="h-20 w-20 object-contain"
+              />
+            </div>
+            <div className="text-left">
+              <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                MailTempFast
+              </h1>
+              <p className="text-lg text-gray-600 font-medium">E-mails temporários reais</p>
+            </div>
+          </div>
+        </div>
+
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Proteja sua <span className="text-blue-600">Privacidade</span> Online
