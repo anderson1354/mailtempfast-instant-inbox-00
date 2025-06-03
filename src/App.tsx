@@ -1,29 +1,39 @@
-
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import Privacy from "./pages/Privacidade";
-import Contact from "./pages/Contato";
-import About from "./pages/Sobre";
-import Blog from "./pages/Blog";
-import ComoUsar from "./pages/blog/ComoUsar";
-import EviteSpam from "./pages/blog/EviteSpam";
-import PorqueProteger from "./pages/blog/PorqueProteger";
+import Privacy from "./pages/Privacy";
+import Contact from "./pages/Contact";
+import About from "./pages/About";
 
-const App = () => (
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/privacidade" element={<Privacy />} />
-      <Route path="/contato" element={<Contact />} />
-      <Route path="/sobre" element={<About />} />
-      <Route path="/blog" element={<Blog />} />
-      <Route path="/blog/como-usar" element={<ComoUsar />} />
-      <Route path="/blog/evite-spam" element={<EviteSpam />} />
-      <Route path="/blog/por-que-proteger" element={<PorqueProteger />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  </BrowserRouter>
-);
+const App = () => {
+  useEffect(() => {
+    const script1 = document.createElement("script");
+    script1.async = true;
+    script1.src = "https://www.googletagmanager.com/gtag/js?id=G-LVLKB7NNRW";
+    document.head.appendChild(script1);
+
+    const script2 = document.createElement("script");
+    script2.innerHTML = `
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-LVLKB7NNRW');
+    `;
+    document.head.appendChild(script2);
+  }, []);
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/privacidade" element={<Privacy />} />
+        <Route path="/contato" element={<Contact />} />
+        <Route path="/sobre" element={<About />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
 export default App;
