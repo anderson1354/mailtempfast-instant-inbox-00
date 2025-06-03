@@ -82,27 +82,27 @@ export default function Blog() {
               const IconComponent = article.icon;
               
               return (
-                <Card key={article.id} className="shadow-lg border-0 bg-white/90 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full hover:-translate-y-2">
-                  <CardHeader className={`${colors.bg} rounded-t-lg`}>
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="p-2 bg-white rounded-full shadow-md">
-                        <IconComponent className={`h-6 w-6 ${colors.icon}`} />
+                <Link key={article.id} to={`/blog/${article.slug}`} className="block">
+                  <Card className="shadow-lg border-0 bg-white/90 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full hover:-translate-y-2 cursor-pointer">
+                    <CardHeader className={`${colors.bg} rounded-t-lg`}>
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="p-2 bg-white rounded-full shadow-md">
+                          <IconComponent className={`h-6 w-6 ${colors.icon}`} />
+                        </div>
                       </div>
-                    </div>
-                    <CardTitle className="text-xl text-gray-800 leading-tight mb-3">
-                      {article.title}
-                    </CardTitle>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Calendar className="h-4 w-4" />
-                      <span>{article.date}</span>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p-6 flex flex-col h-full">
-                    <p className="text-gray-700 leading-relaxed mb-6 flex-grow line-height-relaxed">
-                      {article.intro}
-                    </p>
-                    <div className="mt-auto">
-                      <Link to={`/blog/${article.slug}`} className="block">
+                      <CardTitle className="text-xl text-gray-800 leading-tight mb-3">
+                        {article.title}
+                      </CardTitle>
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <Calendar className="h-4 w-4" />
+                        <span>{article.date}</span>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="p-6 flex flex-col h-full">
+                      <p className="text-gray-700 leading-relaxed mb-6 flex-grow line-height-relaxed">
+                        {article.intro}
+                      </p>
+                      <div className="mt-auto">
                         <Button 
                           className={`w-full ${colors.button} text-white transition-all duration-300 group shadow-lg hover:shadow-xl transform hover:scale-105`}
                           size="lg"
@@ -110,10 +110,10 @@ export default function Blog() {
                           <span className="font-semibold">Ler Artigo Completo</span>
                           <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
                         </Button>
-                      </Link>
-                    </div>
-                  </CardContent>
-                </Card>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
               );
             })}
           </div>
