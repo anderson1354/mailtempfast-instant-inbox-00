@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Copy, RefreshCw, Mail, Clock, Shield, Zap, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -67,7 +68,7 @@ const Index = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isActive, timeLeft]);
+  }, [isActive, timeLeft, toast]);
 
   useEffect(() => {
     generateEmail();
@@ -187,7 +188,7 @@ const Index = () => {
 
         {currentEmail && isActive && (
           <div className="mt-12">
-            <EmailInbox currentEmail={currentEmail} />
+            <EmailInbox currentEmail={currentEmail} emailPassword="tempPassword123" />
           </div>
         )}
 
