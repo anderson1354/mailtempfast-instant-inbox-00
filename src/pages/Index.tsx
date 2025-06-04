@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Copy, RefreshCw, Mail, Clock, Shield, Zap, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,27 +10,18 @@ import PrivacyNotice from "@/components/PrivacyNotice";
 
 const Index = () => {
   const [currentEmail, setCurrentEmail] = useState("");
-  const [emailPassword, setEmailPassword] = useState("");
   const [timeLeft, setTimeLeft] = useState(3600);
   const [isActive, setIsActive] = useState(false);
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   const generateEmail = () => {
     const random = Math.random().toString(36).substring(2, 12);
     const newEmail = `${random}@dcpa.net`;
-    const newPassword = Math.random().toString(36).substring(2, 12);
-    
     setCurrentEmail(newEmail);
-    setEmailPassword(newPassword);
     setTimeLeft(3600);
     setIsActive(true);
     setCopied(false);
-    scrollToTop();
 
     toast({
       title: "✅ E-mail gerado com sucesso!",
@@ -44,7 +34,6 @@ const Index = () => {
       await navigator.clipboard.writeText(currentEmail);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-      scrollToTop();
 
       toast({
         title: "📋 E-mail copiado!",
@@ -66,7 +55,6 @@ const Index = () => {
         if (prev <= 1) {
           setIsActive(false);
           setCurrentEmail("");
-          setEmailPassword("");
           toast({
             title: "⏰ E-mail expirado",
             description: "Gere um novo e-mail temporário para continuar.",
@@ -79,7 +67,7 @@ const Index = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isActive, timeLeft, toast]);
+  }, [isActive, timeLeft]);
 
   useEffect(() => {
     generateEmail();
@@ -97,41 +85,16 @@ const Index = () => {
 
       <header className="bg-white shadow-sm border-b border-blue-100">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg">
-                <Mail className="h-8 w-8 text-white" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-                  MailTempFast
-                </h1>
-                <p className="text-sm text-gray-600">E-mails temporários com @dcpa.net</p>
-              </div>
+          <div className="flex items-center justify-center space-x-3">
+            <div className="p-2 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg">
+              <Mail className="h-8 w-8 text-white" />
             </div>
-            <nav className="hidden md:flex items-center space-x-6">
-              <a 
-                href="/blog" 
-                onClick={scrollToTop}
-                className="text-blue-600 hover:text-blue-800 font-bold text-xl transition-colors hover:underline px-4 py-2 rounded-lg hover:bg-blue-50"
-              >
-                Blog
-              </a>
-              <a 
-                href="/sobre" 
-                onClick={scrollToTop}
-                className="text-gray-700 hover:text-blue-600 transition-colors"
-              >
-                Sobre
-              </a>
-              <a 
-                href="/contato" 
-                onClick={scrollToTop}
-                className="text-gray-700 hover:text-blue-600 transition-colors"
-              >
-                Contato
-              </a>
-            </nav>
+            <div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                MailTempFast
+              </h1>
+              <p className="text-sm text-gray-600">E-mails temporários com @dcpa.net</p>
+            </div>
           </div>
         </div>
       </header>
@@ -206,11 +169,7 @@ const Index = () => {
                         </>
                       )}
                     </Button>
-                    <Button 
-                      onClick={generateEmail} 
-                      variant="outline" 
-                      className="flex-1 min-w-[140px] border-blue-600 text-blue-600 hover:bg-blue-50"
-                    >
+                    <Button onClick={generateEmail} variant="outline" className="flex-1 min-w-[140px] border-blue-600 text-blue-600 hover:bg-blue-50">
                       <RefreshCw className="h-4 w-4 mr-2" />
                       Novo E-mail
                     </Button>
@@ -228,7 +187,7 @@ const Index = () => {
 
         {currentEmail && isActive && (
           <div className="mt-12">
-            <EmailInbox currentEmail={currentEmail} emailPassword={emailPassword} />
+            <EmailInbox currentEmail={currentEmail} />
           </div>
         )}
 
