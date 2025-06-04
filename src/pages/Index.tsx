@@ -11,6 +11,7 @@ import PrivacyNotice from "@/components/PrivacyNotice";
 
 const Index = () => {
   const [currentEmail, setCurrentEmail] = useState("");
+  const [emailPassword, setEmailPassword] = useState("");
   const [timeLeft, setTimeLeft] = useState(3600);
   const [isActive, setIsActive] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -23,7 +24,10 @@ const Index = () => {
   const generateEmail = () => {
     const random = Math.random().toString(36).substring(2, 12);
     const newEmail = `${random}@dcpa.net`;
+    const newPassword = Math.random().toString(36).substring(2, 12);
+    
     setCurrentEmail(newEmail);
+    setEmailPassword(newPassword);
     setTimeLeft(3600);
     setIsActive(true);
     setCopied(false);
@@ -62,6 +66,7 @@ const Index = () => {
         if (prev <= 1) {
           setIsActive(false);
           setCurrentEmail("");
+          setEmailPassword("");
           toast({
             title: "⏰ E-mail expirado",
             description: "Gere um novo e-mail temporário para continuar.",
@@ -108,7 +113,7 @@ const Index = () => {
               <a 
                 href="/blog" 
                 onClick={scrollToTop}
-                className="text-blue-600 hover:text-blue-800 font-semibold text-lg transition-colors hover:underline"
+                className="text-blue-600 hover:text-blue-800 font-bold text-xl transition-colors hover:underline px-4 py-2 rounded-lg hover:bg-blue-50"
               >
                 Blog
               </a>
@@ -223,7 +228,7 @@ const Index = () => {
 
         {currentEmail && isActive && (
           <div className="mt-12">
-            <EmailInbox currentEmail={currentEmail} />
+            <EmailInbox currentEmail={currentEmail} emailPassword={emailPassword} />
           </div>
         )}
 
