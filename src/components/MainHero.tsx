@@ -1,30 +1,82 @@
 
 import React from 'react';
-import { Clock, Shield, Zap } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Mail, Shield, Clock, Zap } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const MainHero = () => {
+  const scrollToGenerator = () => {
+    const generator = document.querySelector('[data-email-generator]');
+    if (generator) {
+      generator.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className="text-center mb-12">
-      <h2 className="text-4xl font-bold text-gray-900 mb-4">
-        Proteja sua <span className="text-blue-600">Privacidade</span> Online
-      </h2>
-      <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-        Gere e-mails temporários reais instantaneamente. Perfeito para cadastros, testes e proteção contra spam.
-      </p>
-      <div className="flex flex-wrap justify-center gap-4 mb-8">
-        <Badge variant="secondary" className="px-4 py-2 text-sm">
-          <Zap className="h-4 w-4 mr-2" />
-          Instantâneo
-        </Badge>
-        <Badge variant="secondary" className="px-4 py-2 text-sm">
-          <Shield className="h-4 w-4 mr-2" />
-          100% Privado
-        </Badge>
-        <Badge variant="secondary" className="px-4 py-2 text-sm">
-          <Clock className="h-4 w-4 mr-2" />
-          Auto-Expira
-        </Badge>
+    <div className="text-center mb-12 max-w-4xl mx-auto">
+      <div className="mb-8">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+          E-mail Temporário{' '}
+          <span className="text-blue-600">Instantâneo</span>
+        </h1>
+        <p className="text-lg sm:text-xl text-gray-700 mb-8 max-w-3xl mx-auto leading-relaxed px-4">
+          Crie endereços de e-mail temporários reais em segundos. 
+          Proteja sua privacidade e evite spam com nossa solução gratuita e segura.
+        </p>
+      </div>
+
+      {/* Botão principal com responsividade melhorada */}
+      <div className="mb-8 px-4">
+        <Button 
+          onClick={scrollToGenerator}
+          size="lg"
+          className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 min-h-[48px] sm:min-h-[56px]"
+        >
+          <Mail className="h-5 w-5 sm:h-6 sm:w-6 mr-2 flex-shrink-0" />
+          <span className="whitespace-nowrap">Criar E-mail Temporário Gratuito</span>
+        </Button>
+      </div>
+
+      {/* Features grid com melhor responsividade */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-8 px-4">
+        <div className="bg-white rounded-lg p-4 sm:p-6 shadow-md border border-blue-100 hover:shadow-lg transition-shadow">
+          <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-lg mx-auto mb-3">
+            <Zap className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+          </div>
+          <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">Instantâneo</h3>
+          <p className="text-xs sm:text-sm text-gray-600">
+            E-mails criados em segundos, prontos para uso imediato
+          </p>
+        </div>
+
+        <div className="bg-white rounded-lg p-4 sm:p-6 shadow-md border border-green-100 hover:shadow-lg transition-shadow">
+          <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-lg mx-auto mb-3">
+            <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
+          </div>
+          <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">100% Seguro</h3>
+          <p className="text-xs sm:text-sm text-gray-600">
+            SSL ativo, zero logs, dados completamente protegidos
+          </p>
+        </div>
+
+        <div className="bg-white rounded-lg p-4 sm:p-6 shadow-md border border-purple-100 hover:shadow-lg transition-shadow">
+          <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-lg mx-auto mb-3">
+            <Clock className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
+          </div>
+          <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">Auto-Exclusão</h3>
+          <p className="text-xs sm:text-sm text-gray-600">
+            E-mails deletados automaticamente após 60 minutos
+          </p>
+        </div>
+
+        <div className="bg-white rounded-lg p-4 sm:p-6 shadow-md border border-orange-100 hover:shadow-lg transition-shadow">
+          <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-orange-100 rounded-lg mx-auto mb-3">
+            <Mail className="h-5 w-5 sm:h-6 sm:w-6 text-orange-600" />
+          </div>
+          <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">E-mails Reais</h3>
+          <p className="text-xs sm:text-sm text-gray-600">
+            Receba mensagens reais, não simuladas ou falsas
+          </p>
+        </div>
       </div>
     </div>
   );
