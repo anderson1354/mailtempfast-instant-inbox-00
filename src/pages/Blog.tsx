@@ -118,26 +118,30 @@ export default function Blog() {
             })}
           </div>
 
-          {/* Enhanced CTA Section */}
+          {/* Enhanced CTA Section com melhor responsividade */}
           <Card className="shadow-2xl border-0 bg-gradient-to-r from-orange-600 via-pink-600 to-red-600 text-white overflow-hidden relative">
             <div className="absolute inset-0 bg-black/10"></div>
-            <CardContent className="p-12 text-center relative z-10">
+            <CardContent className="p-6 sm:p-8 lg:p-12 text-center relative z-10">
               <div className="max-w-2xl mx-auto">
-                <h2 className="text-4xl font-bold mb-6 leading-tight">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 leading-tight">
                   Pronto para proteger sua privacidade?
                 </h2>
-                <p className="text-xl opacity-95 mb-8 leading-relaxed">
+                <p className="text-lg sm:text-xl opacity-95 mb-6 sm:mb-8 leading-relaxed px-2">
                   Experimente nossos e-mails temporários gratuitos agora mesmo e mantenha sua caixa de entrada principal sempre segura!
                 </p>
-                <Link to="/">
-                  <Button 
-                    className="bg-white text-orange-600 hover:bg-gray-100 font-bold px-12 py-4 text-lg rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
-                    size="lg"
-                  >
-                    <Mail className="h-5 w-5 mr-3" />
-                    Criar E-mail Temporário Gratuito
-                  </Button>
-                </Link>
+                <div className="px-4">
+                  <Link to="/">
+                    <Button 
+                      className="w-full sm:w-auto bg-white text-orange-600 hover:bg-gray-100 font-bold px-6 sm:px-8 lg:px-12 py-3 sm:py-4 text-base sm:text-lg rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 min-h-[48px] sm:min-h-[56px]"
+                      size="lg"
+                    >
+                      <Mail className="h-4 w-4 sm:h-5 sm:w-5 mr-2 sm:mr-3 flex-shrink-0" />
+                      <span className="text-sm sm:text-base lg:text-lg whitespace-nowrap">
+                        Criar E-mail Temporário Gratuito
+                      </span>
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </CardContent>
           </Card>
