@@ -5,6 +5,7 @@ import NotFound from "./pages/NotFound";
 import Privacy from "./pages/Privacidade";
 import Contact from "./pages/Contato";
 import About from "./pages/Sobre";
+import Termos from "./pages/Termos";
 import Blog from "./pages/Blog";
 import ComoUsar from "./pages/blog/ComoUsar";
 import EviteSpam from "./pages/blog/EviteSpam";
@@ -17,6 +18,7 @@ const App = () => (
       <Route path="/privacidade" element={<Privacy />} />
       <Route path="/contato" element={<Contact />} />
       <Route path="/sobre" element={<About />} />
+      <Route path="/termos" element={<Termos />} />
       <Route path="/blog" element={<Blog />} />
       <Route path="/blog/como-usar" element={<ComoUsar />} />
       <Route path="/blog/evite-spam" element={<EviteSpam />} />
