@@ -8,7 +8,11 @@ import { useToast } from '@/hooks/use-toast';
 import EmailInbox from '@/components/EmailInbox';
 import { mailTmService } from '@/services/mailtm';
 
-const EmailGenerator = () => {
+interface EmailGeneratorProps {
+  heroGeneratedEmail?: {email: string, password: string} | null;
+}
+
+const EmailGenerator = ({ heroGeneratedEmail }: EmailGeneratorProps) => {
   const [currentEmail, setCurrentEmail] = useState('');
   const [emailPassword, setEmailPassword] = useState('');
   const [timeLeft, setTimeLeft] = useState(3600);
@@ -60,6 +64,17 @@ const EmailGenerator = () => {
     }
   };
 
+  // Effect para lidar com e-mail gerado pelo MainHero
+  useEffect(() => {
+    if (heroGeneratedEmail) {
+      setCurrentEmail(heroGeneratedEmail.email);
+      setEmailPassword(heroGeneratedEmail.password);
+      setTimeLeft(3600);
+      setIsActive(true);
+      setCopied(false);
+    }
+  }, [heroGeneratedEmail]);
+
   const copyEmail = async () => {
     if (!currentEmail) return;
     scrollToTop();
@@ -108,11 +123,13 @@ const EmailGenerator = () => {
   };
 
   useEffect(() => {
-    generateEmail();
+    if (!heroGeneratedEmail) {
+      generateEmail();
+    }
   }, []);
 
   return (
-    <div className="lg:col-span-2">
+    <div className="lg:col-span-2" data-email-generator>
       <Card className="shadow-lg border-blue-100 hover:shadow-xl transition-shadow duration-300">
         <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg">
           <CardTitle className="flex items-center space-x-2">

@@ -2,8 +2,55 @@
 import React from 'react';
 import { Mail, Shield, Clock, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import { mailTmService } from '@/services/mailtm';
 
-const MainHero = () => {
+interface MainHeroProps {
+  onEmailGenerated?: (email: string, password: string) => void;
+}
+
+const MainHero = ({ onEmailGenerated }: MainHeroProps) => {
+  const { toast } = useToast();
+
+  const generateRandomPassword = () => {
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  };
+
+  const handleCreateEmail = async () => {
+    try {
+      const domains = await mailTmService.getDomains();
+      const selectedDomain = domains.includes('dcpa.net') ? 'dcpa.net' : domains[0];
+      
+      const randomString = Math.random().toString(36).substring(2, 12);
+      const newEmail = `${randomString}@${selectedDomain}`;
+      const password = generateRandomPassword();
+      
+      await mailTmService.createAccount(newEmail, password);
+      
+      if (onEmailGenerated) {
+        onEmailGenerated(newEmail, password);
+      }
+      
+      // Scroll para o gerador de e-mail
+      const generator = document.querySelector('[data-email-generator]');
+      if (generator) {
+        generator.scrollIntoView({ behavior: 'smooth' });
+      }
+      
+      toast({
+        title: "✅ E-mail gerado com sucesso!",
+        description: "Seu e-mail temporário está pronto para uso.",
+      });
+    } catch (error) {
+      console.error('Erro ao gerar e-mail:', error);
+      toast({
+        title: "❌ Erro ao gerar e-mail",
+        description: "Tente novamente em alguns segundos.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const scrollToGenerator = () => {
     const generator = document.querySelector('[data-email-generator]');
     if (generator) {
@@ -27,7 +74,7 @@ const MainHero = () => {
       {/* Botão principal com responsividade melhorada */}
       <div className="mb-8 px-4">
         <Button 
-          onClick={scrollToGenerator}
+          onClick={handleCreateEmail}
           size="lg"
           className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 min-h-[48px] sm:min-h-[56px]"
         >
