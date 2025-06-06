@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Copy, RefreshCw, Mail, Clock, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -77,7 +76,6 @@ const EmailGenerator = ({ heroGeneratedEmail }: EmailGeneratorProps) => {
 
   const copyEmail = async () => {
     if (!currentEmail) return;
-    scrollToTop();
     try {
       await navigator.clipboard.writeText(currentEmail);
       setCopied(true);
