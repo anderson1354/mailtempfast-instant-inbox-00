@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield, Mail, CheckCircle } from "lucide-react";
@@ -30,8 +31,9 @@ export default function Sobre() {
               </CardHeader>
               <CardContent>
                 <p className="text-lg text-gray-700 leading-relaxed">
-                  O MailTempFast foi criado para ajudar usuários a proteger sua privacidade online, 
-                  oferecendo e-mails temporários confiáveis com domínio @dcpa.net.
+                  O MailTempFast foi criado para oferecer e-mails temporários rápidos, seguros e confiáveis 
+                  com o domínio @dcpa.net. Nosso objetivo é proteger a privacidade dos usuários online e 
+                  evitar spam em cadastros e testes. Serviço gratuito e acessível.
                 </p>
               </CardContent>
             </Card>
@@ -46,8 +48,8 @@ export default function Sobre() {
               </CardHeader>
               <CardContent>
                 <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                  Nosso serviço é gratuito, rápido e seguro — ideal para cadastros temporários e testes. 
-                  Trabalhamos continuamente para melhorar a estabilidade e usabilidade do site.
+                  Trabalhamos continuamente para melhorar a estabilidade e usabilidade do site, 
+                  garantindo que você tenha a melhor experiência possível ao usar nossos e-mails temporários.
                 </p>
                 
                 <div className="grid md:grid-cols-3 gap-4">

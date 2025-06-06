@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield, Eye, Database, Trash2, Cookie } from "lucide-react";
@@ -20,6 +21,22 @@ export default function Privacidade() {
               Sua privacidade é nossa prioridade
             </p>
           </div>
+
+          {/* Main Policy Statement */}
+          <Card className="shadow-xl border-0 bg-white/80 backdrop-blur-sm mb-8">
+            <CardHeader className="text-center bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-t-lg">
+              <CardTitle className="text-2xl">
+                Nosso Compromisso com sua Privacidade
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-8">
+              <p className="text-lg text-gray-700 leading-relaxed text-center">
+                O MailTempFast respeita sua privacidade. Nenhuma informação pessoal é armazenada. 
+                Todas as mensagens recebidas são temporárias e expiram após o prazo determinado. 
+                Não coletamos nem compartilhamos dados com terceiros.
+              </p>
+            </CardContent>
+          </Card>
 
           {/* Privacy Features */}
           <div className="grid gap-6">
@@ -67,22 +84,6 @@ export default function Privacidade() {
                 <p className="text-gray-700 leading-relaxed">
                   Não compartilhamos, vendemos ou transferimos qualquer dado para terceiros. 
                   Sua privacidade permanece totalmente protegida durante o uso do serviço.
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Cookies */}
-            <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3 text-xl text-gray-800">
-                  <Cookie className="h-6 w-6 text-orange-600" />
-                  Uso de Cookies
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-700 leading-relaxed">
-                  Utilizamos cookies apenas para fins analíticos básicos e funcionalidade do site. 
-                  Nenhum cookie é usado para rastrear informações pessoais ou criar perfis de usuário.
                 </p>
               </CardContent>
             </Card>

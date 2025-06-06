@@ -33,7 +33,7 @@ export default function Contato() {
               <div className="text-center mb-8">
                 <Mail className="h-16 w-16 text-purple-600 mx-auto mb-4" />
                 <p className="text-lg text-gray-700 mb-4">
-                  Para dúvidas, sugestões ou parcerias, entre em contato pelo e-mail:
+                  Para suporte, dúvidas ou sugestões, envie um e-mail para:
                 </p>
                 <div className="bg-purple-50 rounded-lg p-4 inline-block">
                   <a 
