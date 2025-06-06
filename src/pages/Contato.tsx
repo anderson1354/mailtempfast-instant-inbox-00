@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, Clock, MessageCircle, Users } from "lucide-react";
@@ -36,10 +37,10 @@ export default function Contato() {
                 </p>
                 <div className="bg-purple-50 rounded-lg p-4 inline-block">
                   <a 
-                    href="mailto:contato@mailtempfast.com" 
+                    href="mailto:dicaswebsegura@gmail.com" 
                     className="text-2xl font-bold text-purple-600 hover:text-purple-800 transition-colors"
                   >
-                    contato@mailtempfast.com
+                    dicaswebsegura@gmail.com
                   </a>
                 </div>
               </div>
