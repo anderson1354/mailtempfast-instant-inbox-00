@@ -185,16 +185,15 @@ export default function Blog() {
                   >
                     Página Inicial
                   </Link>
-<a
+  <a
   href="https://blog.mailtempfast.com"
   target="_blank"
   rel="noopener noreferrer"
   className="block text-gray-300 hover:text-orange-400 transition-colors duration-300 hover:underline"
->
-  Blog
-</a>
-                  
-                </div>
+  >
+   Blog
+      </a>
+           </div>
               </div>
               
               <div className="text-center">
