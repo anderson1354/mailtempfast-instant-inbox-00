@@ -51,7 +51,7 @@ export default function Header() {
             >
               Blog
             </a>
-            <Link 
+            <Link
               to="/sobre" 
               onClick={scrollToTop}
               className="text-gray-700 hover:text-blue-600 font-medium transition-colors hover:underline"
