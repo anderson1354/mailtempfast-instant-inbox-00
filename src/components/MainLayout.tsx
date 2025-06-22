@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Mail, Shield, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -66,8 +67,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
                   </Link>
                   <a 
                     href="https://blog.mailtempfast.com/" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
                     className="block text-gray-300 hover:text-blue-400 transition-colors duration-300 hover:underline"
                   >
                     Blog

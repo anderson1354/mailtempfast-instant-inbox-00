@@ -47,8 +47,6 @@ export default function Header() {
             </Link>
             <a 
               href="https://blog.mailtempfast.com/" 
-              target="_blank" 
-              rel="noopener noreferrer"
               className="text-blue-600 hover:text-blue-800 font-bold text-lg transition-colors hover:underline px-4 py-2 bg-blue-50 hover:bg-blue-100 rounded-lg shadow-sm"
             >
               Blog
@@ -108,8 +106,6 @@ export default function Header() {
               </Link>
               <a 
                 href="https://blog.mailtempfast.com/" 
-                target="_blank" 
-                rel="noopener noreferrer"
                 className="text-blue-600 hover:text-blue-800 font-bold transition-colors hover:underline py-2 px-3 bg-blue-50 rounded-lg"
               >
                 Blog
