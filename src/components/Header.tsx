@@ -46,7 +46,7 @@ export default function Header() {
               Início
             </Link>
             <a 
-              href="https://blog.mailtempfast.com/" 
+              href="https://blog.mailtempfast.com/"
               className="text-blue-600 hover:text-blue-800 font-bold text-lg transition-colors hover:underline px-4 py-2 bg-blue-50 hover:bg-blue-100 rounded-lg shadow-sm"
             >
               Blog
