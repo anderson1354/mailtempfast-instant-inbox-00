@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Mail, Shield, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -65,13 +64,14 @@ const MainLayout = ({ children }: MainLayoutProps) => {
                   >
                     Página Inicial
                   </Link>
-                  <Link 
-                    to="/blog" 
-                    onClick={scrollToTop}
+                  <a 
+                    href="https://blog.mailtempfast.com/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
                     className="block text-gray-300 hover:text-blue-400 transition-colors duration-300 hover:underline"
                   >
                     Blog
-                  </Link>
+                  </a>
                 </div>
               </div>
               
