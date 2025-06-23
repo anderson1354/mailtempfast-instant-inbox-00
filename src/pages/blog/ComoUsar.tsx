@@ -14,11 +14,14 @@ export default function ComoUsar() {
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
           {/* Back button */}
-          <Link to="/blog" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors mb-8">
-            <ArrowLeft className="h-4 w-4" />
-            <span>Voltar para o blog</span>
-          </Link>
-
+            <a
+    href="https://blog.mailtempfast.com"
+      className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors mb-8"
+   >
+     <ArrowLeft className="h-4 w-4" />
+       <span>Voltar para o blog</span>
+    </a>     
+          
           {/* Article header */}
           <div className="text-center mb-8">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
