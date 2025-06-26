@@ -1,13 +1,14 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Mail, Clock, User, RefreshCw } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { mailTmService, type MailTmMessage, type MailTmMessageDetail } from '@/services/mailtm';
 import { useToast } from '@/hooks/use-toast';
+import { useHybridInbox } from '@/hooks/useHybridInbox';
+import HostingerConfigComponent from '@/components/HostingerConfig';
 
 interface EmailInboxProps {
   currentEmail: string;
@@ -15,64 +16,12 @@ interface EmailInboxProps {
 }
 
 const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) => {
-  const [messages, setMessages] = useState<MailTmMessage[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedMessage, setSelectedMessage] = useState<MailTmMessageDetail | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { messages, isLoading, isAuthenticated, hostingerEmail, refreshMessages } = useHybridInbox(currentEmail, emailPassword);
+  const [selectedMessage, setSelectedMessage] = useState<any>(null);
   const { toast } = useToast();
 
-  const authenticateAndFetchMessages = useCallback(async () => {
-    if (!currentEmail || !emailPassword) return;
-
-    setIsLoading(true);
-    try {
-      // Fazer login na conta
-      await mailTmService.login(currentEmail, emailPassword);
-      setIsAuthenticated(true);
-      
-      // Buscar mensagens
-      const fetchedMessages = await mailTmService.getMessages();
-      setMessages(fetchedMessages);
-      
-      console.log('Mensagens carregadas:', fetchedMessages);
-    } catch (error) {
-      console.error('Erro ao autenticar ou buscar mensagens:', error);
-      toast({
-        title: "❌ Erro de autenticação",
-        description: "Não foi possível conectar à caixa de entrada.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  }, [currentEmail, emailPassword, toast]);
-
-  const handleMessageClick = async (message: MailTmMessage) => {
-    try {
-      setIsLoading(true);
-      const messageDetail = await mailTmService.getMessageDetail(message.id);
-      setSelectedMessage(messageDetail);
-      
-      // Marcar como lida se não estiver
-      if (!message.seen) {
-        await mailTmService.markAsRead(message.id);
-        // Atualizar o estado local
-        setMessages(prev => 
-          prev.map(msg => 
-            msg.id === message.id ? { ...msg, seen: true } : msg
-          )
-        );
-      }
-    } catch (error) {
-      console.error('Erro ao carregar detalhes da mensagem:', error);
-      toast({
-        title: "❌ Erro",
-        description: "Não foi possível carregar os detalhes da mensagem.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+  const handleMessageClick = (message: any) => {
+    setSelectedMessage(message);
   };
 
   const formatTime = (timestamp: string) => {
@@ -88,34 +37,22 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
     return date.toLocaleString('pt-BR');
   };
 
-  // Efeito para autenticar quando o e-mail muda
-  useEffect(() => {
-    if (currentEmail && emailPassword) {
-      authenticateAndFetchMessages();
-    }
-  }, [currentEmail, emailPassword, authenticateAndFetchMessages]);
-
-  // Efeito para atualizar mensagens a cada 30 segundos
-  useEffect(() => {
-    if (!isAuthenticated) return;
-
-    const interval = setInterval(async () => {
-      try {
-        const fetchedMessages = await mailTmService.getMessages();
-        setMessages(fetchedMessages);
-      } catch (error) {
-        console.error('Erro na atualização automática:', error);
-      }
-    }, 30000); // 30 segundos
-
-    return () => clearInterval(interval);
-  }, [isAuthenticated]);
+  const handleConfigSaved = () => {
+    toast({
+      title: "✅ Hostinger configurada!",
+      description: "O sistema agora receberá emails de ambas as fontes.",
+    });
+    // Forçar re-autenticação para criar email na Hostinger
+    window.location.reload();
+  };
 
   if (!currentEmail) {
     return null;
   }
 
   const unreadCount = messages.filter(msg => !msg.seen).length;
+  const mailTmCount = messages.filter(msg => msg.source === 'mailtm').length;
+  const hostingerCount = messages.filter(msg => msg.source === 'hostinger').length;
 
   return (
     <Card className="shadow-lg border-blue-100">
@@ -123,32 +60,43 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center space-x-2">
             <Mail className="h-5 w-5" />
-            <span>Caixa de Entrada</span>
+            <span>Caixa de Entrada Híbrida</span>
             {unreadCount > 0 && (
               <Badge variant="secondary" className="bg-white text-blue-700">
                 {unreadCount} nova(s)
               </Badge>
             )}
           </CardTitle>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={authenticateAndFetchMessages}
-            disabled={isLoading}
-            className="bg-white/10 border-white/20 text-white hover:bg-white/20"
-          >
-            <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-            Atualizar
-          </Button>
+          <div className="flex items-center space-x-2">
+            <HostingerConfigComponent onConfigSaved={handleConfigSaved} />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={refreshMessages}
+              disabled={isLoading}
+              className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+            >
+              <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+              Atualizar
+            </Button>
+          </div>
         </div>
+        {(hostingerEmail || isAuthenticated) && (
+          <div className="text-sm opacity-90 mt-2">
+            <div className="flex flex-wrap gap-4">
+              <span>📧 Mail.tm: {currentEmail} ({mailTmCount})</span>
+              {hostingerEmail && <span>🏢 Hostinger: {hostingerEmail} ({hostingerCount})</span>}
+            </div>
+          </div>
+        )}
       </CardHeader>
       <CardContent className="p-0">
         {!isAuthenticated ? (
           <div className="text-center py-8">
             <Mail className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600 mb-2">Conectando à caixa de entrada...</p>
+            <p className="text-gray-600 mb-2">Conectando às caixas de entrada...</p>
             <p className="text-sm text-gray-500">
-              E-mails para <strong>{currentEmail}</strong> aparecerão aqui
+              Configurando recebimento híbrido de emails
             </p>
           </div>
         ) : messages.length === 0 ? (
@@ -156,7 +104,7 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
             <Mail className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-600 mb-2">Nenhum e-mail recebido ainda</p>
             <p className="text-sm text-gray-500">
-              E-mails enviados para <strong>{currentEmail}</strong> aparecerão aqui
+              Emails chegarão automaticamente a cada 10 segundos
             </p>
           </div>
         ) : (
@@ -164,6 +112,7 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
             <TableHeader>
               <TableRow>
                 <TableHead className="w-12"></TableHead>
+                <TableHead className="w-16">Fonte</TableHead>
                 <TableHead>Remetente</TableHead>
                 <TableHead>Assunto</TableHead>
                 <TableHead className="w-24">Horário</TableHead>
@@ -179,6 +128,11 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
                     >
                       <TableCell>
                         <div className={`w-3 h-3 rounded-full ${message.seen ? 'bg-gray-300' : 'bg-blue-600'}`} />
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={message.source === 'hostinger' ? 'default' : 'secondary'} className="text-xs">
+                          {message.source === 'hostinger' ? '🏢' : '📧'}
+                        </Badge>
                       </TableCell>
                       <TableCell className="font-medium">
                         <div className="flex items-center space-x-2">
@@ -205,6 +159,9 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
                         <DialogTitle className="flex items-center space-x-2">
                           <Mail className="h-5 w-5 text-blue-600" />
                           <span>{selectedMessage.subject || '(sem assunto)'}</span>
+                          <Badge variant={selectedMessage.source === 'hostinger' ? 'default' : 'secondary'}>
+                            {selectedMessage.source === 'hostinger' ? 'Hostinger' : 'Mail.tm'}
+                          </Badge>
                         </DialogTitle>
                       </DialogHeader>
                       <div className="space-y-4">
@@ -220,14 +177,6 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
                               </p>
                             </div>
                             <div>
-                              <span className="font-medium text-gray-700">Para:</span>
-                              <p className="text-gray-900">{currentEmail}</p>
-                            </div>
-                            <div className="col-span-2">
-                              <span className="font-medium text-gray-700">Assunto:</span>
-                              <p className="text-gray-900">{selectedMessage.subject || '(sem assunto)'}</p>
-                            </div>
-                            <div className="col-span-2">
                               <span className="font-medium text-gray-700">Recebido em:</span>
                               <p className="text-gray-900">{formatDate(selectedMessage.createdAt)}</p>
                             </div>
@@ -236,16 +185,9 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
                         <div className="bg-white border rounded-lg p-4">
                           <h4 className="font-medium text-gray-700 mb-2">Conteúdo:</h4>
                           <div className="prose max-w-none">
-                            {selectedMessage.html && selectedMessage.html.length > 0 ? (
-                              <div 
-                                className="text-gray-900 leading-relaxed"
-                                dangerouslySetInnerHTML={{ __html: selectedMessage.html[0] }}
-                              />
-                            ) : (
-                              <p className="text-gray-900 leading-relaxed whitespace-pre-line">
-                                {selectedMessage.text || selectedMessage.intro || 'Conteúdo não disponível'}
-                              </p>
-                            )}
+                            <p className="text-gray-900 leading-relaxed whitespace-pre-line">
+                              {selectedMessage.text || 'Conteúdo não disponível'}
+                            </p>
                           </div>
                         </div>
                       </div>
