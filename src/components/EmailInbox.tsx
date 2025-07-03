@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Mail, Clock, User, RefreshCw, Wifi, WifiOff, Zap, Trash2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -110,11 +111,16 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
             )}
           </CardTitle>
           <div className="flex items-center space-x-2">
-            {/* Status de conexão INSTANTÂNEO */}
             <div className="flex items-center space-x-1 bg-white/10 px-2 py-1 rounded text-xs">
-              {getConnectionIcon()}
+              {connectionStatus === 'connected' && <Wifi className="h-4 w-4 text-green-500" />}
+              {connectionStatus === 'reconnecting' && <RefreshCw className="h-4 w-4 text-yellow-500 animate-spin" />}
+              {connectionStatus === 'disconnected' && <WifiOff className="h-4 w-4 text-red-500" />}
               <Zap className="h-3 w-3 text-yellow-300" />
-              <span>{getConnectionText()}</span>
+              <span>
+                {connectionStatus === 'connected' && 'Tempo Real INSTANTÂNEO'}
+                {connectionStatus === 'reconnecting' && 'Reconectando...'}
+                {connectionStatus === 'disconnected' && 'Desconectado'}
+              </span>
             </div>
             <Button
               variant="outline"
@@ -171,92 +177,103 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
                 <TableHead>Remetente</TableHead>
                 <TableHead>Assunto</TableHead>
                 <TableHead className="w-24">Horário</TableHead>
-                <TableHead className="w-20">Ações</TableHead>
+                <TableHead className="w-20 text-center">Excluir</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {messages.map((message) => (
-                <Dialog key={message.id}>
-                  <DialogTrigger asChild>
-                    <TableRow 
-                      className="cursor-pointer hover:bg-blue-50 transition-colors"
-                      onClick={() => handleMessageClick(message)}
+                <TableRow key={message.id} className="hover:bg-blue-50 transition-colors">
+                  <TableCell>
+                    <div className={`w-3 h-3 rounded-full ${message.seen ? 'bg-gray-300' : 'bg-blue-600'}`} />
+                  </TableCell>
+                  <TableCell 
+                    className="font-medium cursor-pointer"
+                    onClick={() => handleMessageClick(message)}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <User className="h-4 w-4 text-gray-500" />
+                      <span className={message.seen ? 'text-gray-600' : 'text-gray-900 font-semibold'}>
+                        {message.from.name || message.from.address}
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell 
+                    className={`cursor-pointer ${message.seen ? 'text-gray-600' : 'text-gray-900 font-semibold'}`}
+                    onClick={() => handleMessageClick(message)}
+                  >
+                    {message.subject || '(sem assunto)'}
+                  </TableCell>
+                  <TableCell 
+                    className="text-sm text-gray-500 cursor-pointer"
+                    onClick={() => handleMessageClick(message)}
+                  >
+                    <div className="flex items-center space-x-1">
+                      <Clock className="h-3 w-3" />
+                      <span>{formatTime(message.createdAt)}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={(e) => handleDeleteMessage(message.id, e)}
+                      disabled={deletingMessageId === message.id}
+                      className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+                      title="Excluir mensagem"
                     >
-                      <TableCell>
-                        <div className={`w-3 h-3 rounded-full ${message.seen ? 'bg-gray-300' : 'bg-blue-600'}`} />
-                      </TableCell>
-                      <TableCell className="font-medium">
-                        <div className="flex items-center space-x-2">
-                          <User className="h-4 w-4 text-gray-500" />
-                          <span className={message.seen ? 'text-gray-600' : 'text-gray-900 font-semibold'}>
-                            {message.from.name || message.from.address}
-                          </span>
-                        </div>
-                      </TableCell>
-                      <TableCell className={message.seen ? 'text-gray-600' : 'text-gray-900 font-semibold'}>
-                        {message.subject || '(sem assunto)'}
-                      </TableCell>
-                      <TableCell className="text-sm text-gray-500">
-                        <div className="flex items-center space-x-1">
-                          <Clock className="h-3 w-3" />
-                          <span>{formatTime(message.createdAt)}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={(e) => handleDeleteMessage(message.id, e)}
-                          disabled={deletingMessageId === message.id}
-                          className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  </DialogTrigger>
-                  {selectedMessage && selectedMessage.id === message.id && (
-                    <DialogContent className="max-w-2xl">
-                      <DialogHeader>
-                        <DialogTitle className="flex items-center space-x-2">
-                          <Mail className="h-5 w-5 text-blue-600" />
-                          <span>{selectedMessage.subject || '(sem assunto)'}</span>
-                          <Badge variant="secondary">Mail.tm</Badge>
-                        </DialogTitle>
-                      </DialogHeader>
-                      <div className="space-y-4">
-                        <div className="bg-gray-50 rounded-lg p-4">
-                          <div className="grid grid-cols-2 gap-4 text-sm">
-                            <div>
-                              <span className="font-medium text-gray-700">De:</span>
-                              <p className="text-gray-900">
-                                {selectedMessage.from.name ? 
-                                  `${selectedMessage.from.name} <${selectedMessage.from.address}>` : 
-                                  selectedMessage.from.address
-                                }
-                              </p>
-                            </div>
-                            <div>
-                              <span className="font-medium text-gray-700">Recebido em:</span>
-                              <p className="text-gray-900">{formatDate(selectedMessage.createdAt)}</p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="bg-white border rounded-lg p-4">
-                          <h4 className="font-medium text-gray-700 mb-2">Conteúdo:</h4>
-                          <div className="prose max-w-none">
-                            <p className="text-gray-900 leading-relaxed whitespace-pre-line">
-                              {selectedMessage.text || 'Conteúdo não disponível'}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </DialogContent>
-                  )}
-                </Dialog>
+                      {deletingMessageId === message.id ? (
+                        <RefreshCw className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Trash2 className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </TableCell>
+                </TableRow>
               ))}
             </TableBody>
           </Table>
+        )}
+
+        {/* Modal para exibir detalhes da mensagem */}
+        {selectedMessage && (
+          <Dialog open={!!selectedMessage} onOpenChange={() => setSelectedMessage(null)}>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle className="flex items-center space-x-2">
+                  <Mail className="h-5 w-5 text-blue-600" />
+                  <span>{selectedMessage.subject || '(sem assunto)'}</span>
+                  <Badge variant="secondary">Mail.tm</Badge>
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="font-medium text-gray-700">De:</span>
+                      <p className="text-gray-900">
+                        {selectedMessage.from.name ? 
+                          `${selectedMessage.from.name} <${selectedMessage.from.address}>` : 
+                          selectedMessage.from.address
+                        }
+                      </p>
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-700">Recebido em:</span>
+                      <p className="text-gray-900">{formatDate(selectedMessage.createdAt)}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-white border rounded-lg p-4">
+                  <h4 className="font-medium text-gray-700 mb-2">Conteúdo:</h4>
+                  <div className="prose max-w-none">
+                    <p className="text-gray-900 leading-relaxed whitespace-pre-line">
+                      {selectedMessage.text || 'Conteúdo não disponível'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         )}
       </CardContent>
     </Card>
