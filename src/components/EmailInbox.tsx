@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Mail, Clock, User, RefreshCw } from 'lucide-react';
+import { Mail, Clock, User, RefreshCw, Wifi, WifiOff } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -16,7 +15,7 @@ interface EmailInboxProps {
 }
 
 const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) => {
-  const { messages, isLoading, isAuthenticated, hostingerEmail, refreshMessages } = useHybridInbox(currentEmail, emailPassword);
+  const { messages, isLoading, isAuthenticated, hostingerEmail, connectionStatus, refreshMessages } = useHybridInbox(currentEmail, emailPassword);
   const [selectedMessage, setSelectedMessage] = useState<any>(null);
   const { toast } = useToast();
 
@@ -46,6 +45,28 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
     window.location.reload();
   };
 
+  const getConnectionIcon = () => {
+    switch (connectionStatus) {
+      case 'connected':
+        return <Wifi className="h-4 w-4 text-green-500" />;
+      case 'reconnecting':
+        return <RefreshCw className="h-4 w-4 text-yellow-500 animate-spin" />;
+      case 'disconnected':
+        return <WifiOff className="h-4 w-4 text-red-500" />;
+    }
+  };
+
+  const getConnectionText = () => {
+    switch (connectionStatus) {
+      case 'connected':
+        return 'Conectado - Tempo Real';
+      case 'reconnecting':
+        return 'Reconectando...';
+      case 'disconnected':
+        return 'Desconectado';
+    }
+  };
+
   if (!currentEmail) {
     return null;
   }
@@ -68,6 +89,11 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
             )}
           </CardTitle>
           <div className="flex items-center space-x-2">
+            {/* Status de conexão */}
+            <div className="flex items-center space-x-1 bg-white/10 px-2 py-1 rounded text-xs">
+              {getConnectionIcon()}
+              <span>{getConnectionText()}</span>
+            </div>
             <HostingerConfigComponent onConfigSaved={handleConfigSaved} />
             <Button
               variant="outline"
@@ -86,6 +112,9 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
             <div className="flex flex-wrap gap-4">
               <span>📧 Mail.tm: {currentEmail} ({mailTmCount})</span>
               {hostingerEmail && <span>🏢 Hostinger: {hostingerEmail} ({hostingerCount})</span>}
+              <span className="text-xs bg-white/10 px-2 py-1 rounded">
+                ⚡ Verificação a cada 5 segundos
+              </span>
             </div>
           </div>
         )}
@@ -96,7 +125,7 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
             <Mail className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-600 mb-2">Conectando às caixas de entrada...</p>
             <p className="text-sm text-gray-500">
-              Configurando recebimento híbrido de emails
+              Configurando recebimento em tempo real
             </p>
           </div>
         ) : messages.length === 0 ? (
@@ -104,8 +133,13 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
             <Mail className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-600 mb-2">Nenhum e-mail recebido ainda</p>
             <p className="text-sm text-gray-500">
-              Emails chegarão automaticamente a cada 10 segundos
+              Emails chegarão automaticamente a cada 5 segundos
             </p>
+            {connectionStatus === 'connected' && (
+              <div className="mt-4 text-green-600 text-sm font-medium">
+                🔔 Sistema ativo - Monitoramento em tempo real
+              </div>
+            )}
           </div>
         ) : (
           <Table>
