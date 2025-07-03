@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Clock, User, RefreshCw, Wifi, WifiOff } from 'lucide-react';
+import { Mail, Clock, User, RefreshCw, Wifi, WifiOff, Zap } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -41,8 +41,16 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
       title: "✅ Hostinger configurada!",
       description: "O sistema agora receberá emails de ambas as fontes.",
     });
-    // Forçar re-autenticação para criar email na Hostinger
     window.location.reload();
+  };
+
+  const handleRefreshClick = () => {
+    console.log('🔄 Botão de refresh clicado');
+    toast({
+      title: "🔄 Atualizando...",
+      description: "Verificando novos emails agora",
+    });
+    refreshMessages();
   };
 
   const getConnectionIcon = () => {
@@ -59,7 +67,7 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
   const getConnectionText = () => {
     switch (connectionStatus) {
       case 'connected':
-        return 'Conectado - Tempo Real';
+        return 'Tempo Real Ultra-Rápido';
       case 'reconnecting':
         return 'Reconectando...';
       case 'disconnected':
@@ -89,16 +97,17 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
             )}
           </CardTitle>
           <div className="flex items-center space-x-2">
-            {/* Status de conexão */}
+            {/* Status de conexão otimizado */}
             <div className="flex items-center space-x-1 bg-white/10 px-2 py-1 rounded text-xs">
               {getConnectionIcon()}
+              <Zap className="h-3 w-3 text-yellow-300" />
               <span>{getConnectionText()}</span>
             </div>
             <HostingerConfigComponent onConfigSaved={handleConfigSaved} />
             <Button
               variant="outline"
               size="sm"
-              onClick={refreshMessages}
+              onClick={handleRefreshClick}
               disabled={isLoading}
               className="bg-white/10 border-white/20 text-white hover:bg-white/20"
             >
@@ -112,8 +121,9 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
             <div className="flex flex-wrap gap-4">
               <span>📧 Mail.tm: {currentEmail} ({mailTmCount})</span>
               {hostingerEmail && <span>🏢 Hostinger: {hostingerEmail} ({hostingerCount})</span>}
-              <span className="text-xs bg-white/10 px-2 py-1 rounded">
-                ⚡ Verificação a cada 5 segundos
+              <span className="text-xs bg-white/10 px-2 py-1 rounded flex items-center gap-1">
+                <Zap className="h-3 w-3" />
+                Verificação a cada 3 segundos
               </span>
             </div>
           </div>
@@ -125,7 +135,7 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
             <Mail className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-600 mb-2">Conectando às caixas de entrada...</p>
             <p className="text-sm text-gray-500">
-              Configurando recebimento em tempo real
+              Configurando recebimento ultra-rápido
             </p>
           </div>
         ) : messages.length === 0 ? (
@@ -133,11 +143,12 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
             <Mail className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-600 mb-2">Nenhum e-mail recebido ainda</p>
             <p className="text-sm text-gray-500">
-              Emails chegarão automaticamente a cada 5 segundos
+              Emails chegarão automaticamente a cada 3 segundos
             </p>
             {connectionStatus === 'connected' && (
-              <div className="mt-4 text-green-600 text-sm font-medium">
-                🔔 Sistema ativo - Monitoramento em tempo real
+              <div className="mt-4 text-green-600 text-sm font-medium flex items-center justify-center gap-2">
+                <Zap className="h-4 w-4" />
+                Sistema ultra-rápido ativo - Monitoramento em tempo real
               </div>
             )}
           </div>
