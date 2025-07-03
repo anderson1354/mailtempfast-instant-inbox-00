@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Mail, Clock, User, RefreshCw, Wifi, WifiOff, Zap } from 'lucide-react';
+import { Mail, Clock, User, RefreshCw, Wifi, WifiOff, Zap, Trash2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -15,8 +14,9 @@ interface EmailInboxProps {
 }
 
 const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) => {
-  const { messages, isLoading, isAuthenticated, connectionStatus, refreshMessages } = useHybridInbox(currentEmail, emailPassword);
+  const { messages, isLoading, isAuthenticated, connectionStatus, refreshMessages, deleteMessage } = useHybridInbox(currentEmail, emailPassword);
   const [selectedMessage, setSelectedMessage] = useState<any>(null);
+  const [deletingMessageId, setDeletingMessageId] = useState<string | null>(null);
   const { toast } = useToast();
 
   const handleMessageClick = (message: any) => {
@@ -43,6 +43,28 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
       description: "Buscando emails em tempo real agora mesmo",
     });
     refreshMessages();
+  };
+
+  const handleDeleteMessage = async (messageId: string, event: React.MouseEvent) => {
+    event.stopPropagation(); // Evitar abrir o modal da mensagem
+    
+    setDeletingMessageId(messageId);
+    
+    try {
+      await deleteMessage(messageId);
+      toast({
+        title: "✅ Mensagem excluída!",
+        description: "A mensagem foi removida da sua caixa de entrada.",
+      });
+    } catch (error) {
+      toast({
+        title: "❌ Erro ao excluir",
+        description: "Não foi possível excluir a mensagem. Tente novamente.",
+        variant: "destructive",
+      });
+    } finally {
+      setDeletingMessageId(null);
+    }
   };
 
   const getConnectionIcon = () => {
@@ -149,6 +171,7 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
                 <TableHead>Remetente</TableHead>
                 <TableHead>Assunto</TableHead>
                 <TableHead className="w-24">Horário</TableHead>
+                <TableHead className="w-20">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -178,6 +201,17 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
                           <Clock className="h-3 w-3" />
                           <span>{formatTime(message.createdAt)}</span>
                         </div>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => handleDeleteMessage(message.id, e)}
+                          disabled={deletingMessageId === message.id}
+                          className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
                       </TableCell>
                     </TableRow>
                   </DialogTrigger>

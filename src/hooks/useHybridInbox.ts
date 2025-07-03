@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { mailTmService, type MailTmMessage } from '@/services/mailtm';
 
@@ -164,13 +163,35 @@ export function useHybridInbox(currentEmail: string, emailPassword: string) {
     }
   }, [currentEmail, emailPassword]);
 
-  // Função pública para refresh manual INSTANTÂNEO
   const refreshMessages = useCallback(() => {
     console.log('🚀 Refresh INSTANTÂNEO solicitado...');
     setIsLoading(true);
     lastMessageIds.current.clear(); // Limpar cache para forçar detecção
     fetchMessages(true).finally(() => setIsLoading(false));
   }, [fetchMessages]);
+
+  const deleteMessage = useCallback(async (messageId: string) => {
+    try {
+      // Extrair o ID real da mensagem (remover prefixo 'mailtm_')
+      const realMessageId = messageId.replace('mailtm_', '');
+      
+      console.log(`🗑️ Excluindo mensagem: ${realMessageId}`);
+      await mailTmService.deleteMessage(realMessageId);
+      
+      // Remover mensagem do estado local
+      setMessages(prevMessages => prevMessages.filter(msg => msg.id !== messageId));
+      
+      // Atualizar cache
+      lastMessageIds.current.delete(messageId);
+      
+      console.log('✅ Mensagem excluída com sucesso!');
+      
+      return true;
+    } catch (error) {
+      console.error('❌ Erro ao excluir mensagem:', error);
+      throw error;
+    }
+  }, []);
 
   useEffect(() => {
     if (currentEmail && emailPassword) {
@@ -200,5 +221,6 @@ export function useHybridInbox(currentEmail: string, emailPassword: string) {
     isAuthenticated,
     connectionStatus,
     refreshMessages,
+    deleteMessage,
   };
 }

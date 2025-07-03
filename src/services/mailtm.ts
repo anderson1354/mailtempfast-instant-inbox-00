@@ -1,4 +1,3 @@
-
 interface MailTmAccount {
   id: string;
   address: string;
@@ -161,6 +160,23 @@ class MailTmService {
         seen: true
       })
     });
+  }
+
+  async deleteMessage(messageId: string): Promise<void> {
+    if (!this.token) {
+      throw new Error('Token não encontrado. Faça login primeiro.');
+    }
+
+    const response = await fetch(`${API_BASE_URL}/messages/${messageId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${this.token}`,
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erro ao deletar mensagem: ${response.statusText}`);
+    }
   }
 
   getToken(): string | null {
