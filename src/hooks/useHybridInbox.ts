@@ -1,7 +1,6 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { mailTmService, type MailTmMessage } from '@/services/mailtm';
-import { hostingerService, type HostingerEmail } from '@/services/hostinger';
 
 interface HybridMessage {
   id: string;
@@ -11,21 +10,22 @@ interface HybridMessage {
   text: string;
   createdAt: string;
   seen: boolean;
-  source: 'mailtm' | 'hostinger';
+  source: 'mailtm';
 }
 
 export function useHybridInbox(currentEmail: string, emailPassword: string) {
   const [messages, setMessages] = useState<HybridMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [hostingerEmail, setHostingerEmail] = useState<string>('');
   const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'reconnecting'>('disconnected');
   
-  // Cache otimizado para requisições mais eficientes
+  // Sistema ultra-otimizado para tempo real instantâneo
   const lastFetchTime = useRef<number>(0);
   const retryCount = useRef<number>(0);
   const lastMessageCount = useRef<number>(0);
-  const maxRetries = 3;
+  const lastMessageIds = useRef<Set<string>>(new Set());
+  const maxRetries = 5;
+  const isActiveFetch = useRef<boolean>(false);
 
   const convertMailTmMessage = (msg: MailTmMessage): HybridMessage => ({
     id: `mailtm_${msg.id}`,
@@ -38,134 +38,108 @@ export function useHybridInbox(currentEmail: string, emailPassword: string) {
     source: 'mailtm',
   });
 
-  const convertHostingerMessage = (msg: HostingerEmail): HybridMessage => ({
-    id: `hostinger_${msg.id}`,
-    from: { address: msg.from },
-    subject: msg.subject,
-    intro: msg.body.substring(0, 100) + '...',
-    text: msg.body,
-    createdAt: msg.timestamp,
-    seen: msg.read,
-    source: 'hostinger',
-  });
-
   const fetchMessages = useCallback(async (forceRefresh: boolean = false) => {
-    if (!isAuthenticated) return;
+    if (!isAuthenticated || isActiveFetch.current) return;
 
     const now = Date.now();
-    // Cache mais agressivo - apenas 1 segundo entre chamadas (exceto refresh manual)
-    if (!forceRefresh && now - lastFetchTime.current < 1000) {
+    // Cache ultra-agressivo - apenas 500ms entre chamadas (exceto refresh manual)
+    if (!forceRefresh && now - lastFetchTime.current < 500) {
       return;
     }
+
+    isActiveFetch.current = true;
 
     try {
       setConnectionStatus('connected');
       const allMessages: HybridMessage[] = [];
 
-      // Priorizar Mail.tm para tempo real máximo
+      // Priorizar Mail.tm para tempo real INSTANTÂNEO
       if (currentEmail && emailPassword) {
-        console.log('📧 Buscando emails do Mail.tm (tempo real otimizado)...');
+        console.log('⚡ Verificação INSTANTÂNEA Mail.tm...');
         try {
           const mailTmMessages = await mailTmService.getMessages();
           allMessages.push(...mailTmMessages.map(convertMailTmMessage));
-          console.log(`✅ Mail.tm: ${mailTmMessages.length} mensagens encontradas`);
+          console.log(`✅ Mail.tm INSTANTÂNEO: ${mailTmMessages.length} mensagens`);
           retryCount.current = 0;
         } catch (error) {
-          console.error('❌ Erro ao buscar do mail.tm:', error);
+          console.error('❌ Erro Mail.tm:', error);
           setConnectionStatus('reconnecting');
           
           if (retryCount.current < maxRetries) {
             retryCount.current++;
-            console.log(`🔄 Tentativa de reconexão ${retryCount.current}/${maxRetries}`);
+            console.log(`🔄 Reconexão instantânea ${retryCount.current}/${maxRetries}`);
             setTimeout(() => {
               authenticateServices();
-            }, 1000 * retryCount.current);
+            }, 200);
           }
-        }
-      }
-
-      // Buscar da Hostinger com menos frequência para não sobrecarregar
-      if (hostingerEmail && hostingerService.getConfig() && (forceRefresh || now % 15000 < 3000)) {
-        try {
-          console.log('🏢 Buscando emails da Hostinger...');
-          const hostingerMessages = await hostingerService.getEmails(hostingerEmail);
-          allMessages.push(...hostingerMessages.map(convertHostingerMessage));
-          console.log(`✅ Hostinger: ${hostingerMessages.length} mensagens encontradas`);
-        } catch (error) {
-          console.error('❌ Erro ao buscar da Hostinger:', error);
         }
       }
 
       // Ordenar por data (mais recentes primeiro)
       allMessages.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       
-      // Detecção inteligente de novos emails
-      const newCount = allMessages.length;
-      const previousCount = lastMessageCount.current;
+      // Detecção INSTANTÂNEA de novos emails
+      const currentMessageIds = new Set(allMessages.map(msg => msg.id));
+      const previousMessageIds = lastMessageIds.current;
+      
+      // Verificar se há mensagens realmente novas
+      const newMessages = allMessages.filter(msg => !previousMessageIds.has(msg.id));
       
       setMessages(allMessages);
       lastFetchTime.current = now;
-      lastMessageCount.current = newCount;
+      lastMessageCount.current = allMessages.length;
+      lastMessageIds.current = currentMessageIds;
 
-      // Notificar sobre novos emails com mais eficiência
-      if (newCount > previousCount && previousCount > 0) {
-        const newEmailsCount = newCount - previousCount;
-        console.log(`🔔 ${newEmailsCount} novo(s) email(s) recebido(s) AGORA!`);
+      // Notificação INSTANTÂNEA de novos emails
+      if (newMessages.length > 0 && previousMessageIds.size > 0) {
+        console.log(`🚀 ${newMessages.length} EMAIL(S) NOVO(S) CHEGOU AGORA MESMO!`);
         
-        // Notificação do navegador otimizada
+        // Notificação do navegador INSTANTÂNEA
         if ('Notification' in window && Notification.permission === 'granted') {
-          new Notification(`📧 ${newEmailsCount} novo(s) email(s)`, {
-            body: `Recebido em tempo real - ${new Date().toLocaleTimeString()}`,
-            icon: '/favicon.ico',
-            tag: 'new-email'
+          newMessages.forEach(msg => {
+            new Notification(`📧 Novo email instantâneo!`, {
+              body: `De: ${msg.from.name || msg.from.address}\nAssunto: ${msg.subject}`,
+              icon: '/favicon.ico',
+              tag: `new-email-${msg.id}`
+            });
           });
         }
       }
 
     } catch (error) {
-      console.error('❌ Erro geral ao buscar mensagens:', error);
+      console.error('❌ Erro geral:', error);
       setConnectionStatus('disconnected');
+    } finally {
+      isActiveFetch.current = false;
     }
-  }, [currentEmail, emailPassword, hostingerEmail, isAuthenticated]);
+  }, [currentEmail, emailPassword, isAuthenticated]);
 
   const authenticateServices = useCallback(async () => {
     setIsLoading(true);
     setConnectionStatus('reconnecting');
     
     try {
-      console.log('🔐 Autenticando serviços para tempo real...');
+      console.log('🚀 Autenticação para TEMPO REAL INSTANTÂNEO...');
       
-      // Autenticar mail.tm com retry otimizado
+      // Autenticar mail.tm com retry ultra-otimizado
       if (currentEmail && emailPassword) {
         let authSuccess = false;
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
           try {
             await mailTmService.login(currentEmail, emailPassword);
-            console.log('✅ Mail.tm autenticado - Modo tempo real ativo');
+            console.log('✅ Mail.tm INSTANTÂNEO autenticado!');
             authSuccess = true;
             break;
           } catch (error) {
-            console.error(`❌ Tentativa ${attempt}/${maxRetries} falhou:`, error);
+            console.error(`❌ Tentativa ${attempt}/${maxRetries}:`, error);
             if (attempt < maxRetries) {
-              await new Promise(resolve => setTimeout(resolve, 500 * attempt));
+              await new Promise(resolve => setTimeout(resolve, 100 * attempt));
             }
           }
         }
         
         if (!authSuccess) {
-          throw new Error('Falha na autenticação do Mail.tm após múltiplas tentativas');
-        }
-      }
-
-      // Configurar Hostinger se disponível
-      if (hostingerService.getConfig() && !hostingerEmail) {
-        try {
-          const randomUsername = Math.random().toString(36).substring(2, 12);
-          const newHostingerEmail = await hostingerService.createEmailAddress(randomUsername);
-          setHostingerEmail(newHostingerEmail);
-          console.log('✅ Email Hostinger criado:', newHostingerEmail);
-        } catch (error) {
-          console.error('❌ Erro ao criar email na Hostinger:', error);
+          throw new Error('Falha na autenticação após múltiplas tentativas');
         }
       }
 
@@ -173,9 +147,13 @@ export function useHybridInbox(currentEmail: string, emailPassword: string) {
       setConnectionStatus('connected');
       retryCount.current = 0;
       
-      // Solicitar permissão para notificações em tempo real
+      // Solicitar permissão para notificações INSTANTÂNEAS
       if ('Notification' in window && Notification.permission === 'default') {
-        Notification.requestPermission();
+        Notification.requestPermission().then(permission => {
+          if (permission === 'granted') {
+            console.log('🔔 Notificações INSTANTÂNEAS ativadas!');
+          }
+        });
       }
       
     } catch (error) {
@@ -184,12 +162,13 @@ export function useHybridInbox(currentEmail: string, emailPassword: string) {
     } finally {
       setIsLoading(false);
     }
-  }, [currentEmail, emailPassword, hostingerEmail]);
+  }, [currentEmail, emailPassword]);
 
-  // Função pública para refresh manual
+  // Função pública para refresh manual INSTANTÂNEO
   const refreshMessages = useCallback(() => {
-    console.log('🔄 Refresh manual solicitado...');
+    console.log('🚀 Refresh INSTANTÂNEO solicitado...');
     setIsLoading(true);
+    lastMessageIds.current.clear(); // Limpar cache para forçar detecção
     fetchMessages(true).finally(() => setIsLoading(false));
   }, [fetchMessages]);
 
@@ -205,12 +184,13 @@ export function useHybridInbox(currentEmail: string, emailPassword: string) {
     // Buscar imediatamente
     fetchMessages();
 
-    // Intervalo ultra-agressivo para tempo real (3 segundos)
-    const interval = setInterval(() => fetchMessages(), 3000);
+    // Intervalo ULTRA-AGRESSIVO para tempo real instantâneo (1.5 segundos)
+    const interval = setInterval(() => fetchMessages(), 1500);
     
-    // Cleanup
+    // Cleanup otimizado
     return () => {
       clearInterval(interval);
+      isActiveFetch.current = false;
     };
   }, [isAuthenticated, fetchMessages]);
 
@@ -218,7 +198,6 @@ export function useHybridInbox(currentEmail: string, emailPassword: string) {
     messages,
     isLoading,
     isAuthenticated,
-    hostingerEmail,
     connectionStatus,
     refreshMessages,
   };

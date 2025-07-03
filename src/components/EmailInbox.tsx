@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Mail, Clock, User, RefreshCw, Wifi, WifiOff, Zap } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,7 +8,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
 import { useHybridInbox } from '@/hooks/useHybridInbox';
-import HostingerConfigComponent from '@/components/HostingerConfig';
 
 interface EmailInboxProps {
   currentEmail: string;
@@ -15,7 +15,7 @@ interface EmailInboxProps {
 }
 
 const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) => {
-  const { messages, isLoading, isAuthenticated, hostingerEmail, connectionStatus, refreshMessages } = useHybridInbox(currentEmail, emailPassword);
+  const { messages, isLoading, isAuthenticated, connectionStatus, refreshMessages } = useHybridInbox(currentEmail, emailPassword);
   const [selectedMessage, setSelectedMessage] = useState<any>(null);
   const { toast } = useToast();
 
@@ -36,19 +36,11 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
     return date.toLocaleString('pt-BR');
   };
 
-  const handleConfigSaved = () => {
-    toast({
-      title: "✅ Hostinger configurada!",
-      description: "O sistema agora receberá emails de ambas as fontes.",
-    });
-    window.location.reload();
-  };
-
   const handleRefreshClick = () => {
-    console.log('🔄 Botão de refresh clicado');
+    console.log('🚀 Refresh INSTANTÂNEO acionado pelo usuário');
     toast({
-      title: "🔄 Atualizando...",
-      description: "Verificando novos emails agora",
+      title: "⚡ Verificação instantânea!",
+      description: "Buscando emails em tempo real agora mesmo",
     });
     refreshMessages();
   };
@@ -67,7 +59,7 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
   const getConnectionText = () => {
     switch (connectionStatus) {
       case 'connected':
-        return 'Tempo Real Ultra-Rápido';
+        return 'Tempo Real INSTANTÂNEO';
       case 'reconnecting':
         return 'Reconectando...';
       case 'disconnected':
@@ -80,8 +72,7 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
   }
 
   const unreadCount = messages.filter(msg => !msg.seen).length;
-  const mailTmCount = messages.filter(msg => msg.source === 'mailtm').length;
-  const hostingerCount = messages.filter(msg => msg.source === 'hostinger').length;
+  const mailTmCount = messages.length;
 
   return (
     <Card className="shadow-lg border-blue-100">
@@ -89,7 +80,7 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center space-x-2">
             <Mail className="h-5 w-5" />
-            <span>Caixa de Entrada Híbrida</span>
+            <span>Caixa de Entrada Ultra-Rápida</span>
             {unreadCount > 0 && (
               <Badge variant="secondary" className="bg-white text-blue-700">
                 {unreadCount} nova(s)
@@ -97,13 +88,12 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
             )}
           </CardTitle>
           <div className="flex items-center space-x-2">
-            {/* Status de conexão otimizado */}
+            {/* Status de conexão INSTANTÂNEO */}
             <div className="flex items-center space-x-1 bg-white/10 px-2 py-1 rounded text-xs">
               {getConnectionIcon()}
               <Zap className="h-3 w-3 text-yellow-300" />
               <span>{getConnectionText()}</span>
             </div>
-            <HostingerConfigComponent onConfigSaved={handleConfigSaved} />
             <Button
               variant="outline"
               size="sm"
@@ -112,18 +102,17 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
               className="bg-white/10 border-white/20 text-white hover:bg-white/20"
             >
               <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-              Atualizar
+              Verificar Agora
             </Button>
           </div>
         </div>
-        {(hostingerEmail || isAuthenticated) && (
+        {isAuthenticated && (
           <div className="text-sm opacity-90 mt-2">
             <div className="flex flex-wrap gap-4">
               <span>📧 Mail.tm: {currentEmail} ({mailTmCount})</span>
-              {hostingerEmail && <span>🏢 Hostinger: {hostingerEmail} ({hostingerCount})</span>}
               <span className="text-xs bg-white/10 px-2 py-1 rounded flex items-center gap-1">
                 <Zap className="h-3 w-3" />
-                Verificação a cada 3 segundos
+                Verificação a cada 1.5 segundos - INSTANTÂNEO
               </span>
             </div>
           </div>
@@ -133,9 +122,9 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
         {!isAuthenticated ? (
           <div className="text-center py-8">
             <Mail className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600 mb-2">Conectando às caixas de entrada...</p>
+            <p className="text-gray-600 mb-2">Conectando ao sistema INSTANTÂNEO...</p>
             <p className="text-sm text-gray-500">
-              Configurando recebimento ultra-rápido
+              Configurando recebimento em tempo real
             </p>
           </div>
         ) : messages.length === 0 ? (
@@ -143,12 +132,12 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
             <Mail className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-600 mb-2">Nenhum e-mail recebido ainda</p>
             <p className="text-sm text-gray-500">
-              Emails chegarão automaticamente a cada 3 segundos
+              Emails chegarão INSTANTANEAMENTE a cada 1.5 segundos
             </p>
             {connectionStatus === 'connected' && (
               <div className="mt-4 text-green-600 text-sm font-medium flex items-center justify-center gap-2">
                 <Zap className="h-4 w-4" />
-                Sistema ultra-rápido ativo - Monitoramento em tempo real
+                Sistema INSTANTÂNEO ativo - Monitoramento em tempo real
               </div>
             )}
           </div>
@@ -157,7 +146,6 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
             <TableHeader>
               <TableRow>
                 <TableHead className="w-12"></TableHead>
-                <TableHead className="w-16">Fonte</TableHead>
                 <TableHead>Remetente</TableHead>
                 <TableHead>Assunto</TableHead>
                 <TableHead className="w-24">Horário</TableHead>
@@ -173,11 +161,6 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
                     >
                       <TableCell>
                         <div className={`w-3 h-3 rounded-full ${message.seen ? 'bg-gray-300' : 'bg-blue-600'}`} />
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={message.source === 'hostinger' ? 'default' : 'secondary'} className="text-xs">
-                          {message.source === 'hostinger' ? '🏢' : '📧'}
-                        </Badge>
                       </TableCell>
                       <TableCell className="font-medium">
                         <div className="flex items-center space-x-2">
@@ -204,9 +187,7 @@ const EmailInbox: React.FC<EmailInboxProps> = ({ currentEmail, emailPassword }) 
                         <DialogTitle className="flex items-center space-x-2">
                           <Mail className="h-5 w-5 text-blue-600" />
                           <span>{selectedMessage.subject || '(sem assunto)'}</span>
-                          <Badge variant={selectedMessage.source === 'hostinger' ? 'default' : 'secondary'}>
-                            {selectedMessage.source === 'hostinger' ? 'Hostinger' : 'Mail.tm'}
-                          </Badge>
+                          <Badge variant="secondary">Mail.tm</Badge>
                         </DialogTitle>
                       </DialogHeader>
                       <div className="space-y-4">
