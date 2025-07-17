@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Mail, Shield, Clock, Zap, Users, Globe, CheckCircle } from 'lucide-react';
+import { Mail, Shield, Clock, Zap, Users, Globe, CheckCircle, Award, Cpu, Eye, Server } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { mailTmService } from '@/services/mailtm';
@@ -38,13 +37,13 @@ const MainHero = ({ onEmailGenerated }: MainHeroProps) => {
       }
       
       toast({
-        title: "✅ E-mail gerado com sucesso!",
+        title: "E-mail gerado com sucesso!",
         description: "Seu e-mail temporário está pronto para uso.",
       });
     } catch (error) {
       console.error('Erro ao gerar e-mail:', error);
       toast({
-        title: "❌ Erro ao gerar e-mail",
+        title: "Erro ao gerar e-mail",
         description: "Tente novamente em alguns segundos.",
         variant: "destructive",
       });
@@ -70,14 +69,23 @@ const MainHero = ({ onEmailGenerated }: MainHeroProps) => {
       {/* Estatísticas de confiança */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12 px-4">
         <div className="text-center">
+          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <Award className="h-8 w-8 text-blue-600" />
+          </div>
           <div className="text-3xl font-bold text-blue-600 mb-2">100K+</div>
           <div className="text-gray-600">E-mails criados mensalmente</div>
         </div>
         <div className="text-center">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <Server className="h-8 w-8 text-green-600" />
+          </div>
           <div className="text-3xl font-bold text-green-600 mb-2">99.9%</div>
           <div className="text-gray-600">Tempo de atividade</div>
         </div>
         <div className="text-center">
+          <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <Cpu className="h-8 w-8 text-purple-600" />
+          </div>
           <div className="text-3xl font-bold text-purple-600 mb-2">SSL</div>
           <div className="text-gray-600">Criptografia ativa</div>
         </div>
@@ -145,28 +153,36 @@ const MainHero = ({ onEmailGenerated }: MainHeroProps) => {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
           <div className="flex items-start space-x-3">
-            <CheckCircle className="h-6 w-6 text-green-600 mt-1 flex-shrink-0" />
+            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mt-1 flex-shrink-0">
+              <CheckCircle className="h-5 w-5 text-green-600" />
+            </div>
             <div>
               <h4 className="font-semibold text-gray-900 mb-1">Proteção contra Spam</h4>
               <p className="text-gray-600 text-sm">Mantenha sua caixa de entrada principal limpa e organizada</p>
             </div>
           </div>
           <div className="flex items-start space-x-3">
-            <CheckCircle className="h-6 w-6 text-green-600 mt-1 flex-shrink-0" />
+            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mt-1 flex-shrink-0">
+              <CheckCircle className="h-5 w-5 text-green-600" />
+            </div>
             <div>
               <h4 className="font-semibold text-gray-900 mb-1">Prevenção de Phishing</h4>
               <p className="text-gray-600 text-sm">Reduza o risco de golpes direcionados ao seu e-mail pessoal</p>
             </div>
           </div>
           <div className="flex items-start space-x-3">
-            <CheckCircle className="h-6 w-6 text-green-600 mt-1 flex-shrink-0" />
+            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mt-1 flex-shrink-0">
+              <CheckCircle className="h-5 w-5 text-green-600" />
+            </div>
             <div>
               <h4 className="font-semibold text-gray-900 mb-1">Anonimato Completo</h4>
               <p className="text-gray-600 text-sm">Navegue e cadastre-se sem revelar sua identidade real</p>
             </div>
           </div>
           <div className="flex items-start space-x-3">
-            <CheckCircle className="h-6 w-6 text-green-600 mt-1 flex-shrink-0" />
+            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mt-1 flex-shrink-0">
+              <CheckCircle className="h-5 w-5 text-green-600" />
+            </div>
             <div>
               <h4 className="font-semibold text-gray-900 mb-1">Sem Cadastro Necessário</h4>
               <p className="text-gray-600 text-sm">Use imediatamente sem fornecer dados pessoais</p>
@@ -182,17 +198,23 @@ const MainHero = ({ onEmailGenerated }: MainHeroProps) => {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
           <div className="bg-white rounded-lg p-6 shadow-md border border-gray-100">
-            <Users className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Users className="h-8 w-8 text-blue-600" />
+            </div>
             <h4 className="font-semibold text-gray-900 mb-2">Cadastros em Fóruns</h4>
             <p className="text-gray-600 text-sm">Para participar de discussões sem expor seu e-mail principal</p>
           </div>
           <div className="bg-white rounded-lg p-6 shadow-md border border-gray-100">
-            <Globe className="h-12 w-12 text-green-600 mx-auto mb-4" />
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Globe className="h-8 w-8 text-green-600" />
+            </div>
             <h4 className="font-semibold text-gray-900 mb-2">Testes de Serviços</h4>
             <p className="text-gray-600 text-sm">Experimente novos apps e sites sem comprometer sua privacidade</p>
           </div>
           <div className="bg-white rounded-lg p-6 shadow-md border border-gray-100">
-            <Mail className="h-12 w-12 text-purple-600 mx-auto mb-4" />
+            <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Mail className="h-8 w-8 text-purple-600" />
+            </div>
             <h4 className="font-semibold text-gray-900 mb-2">Downloads Seguros</h4>
             <p className="text-gray-600 text-sm">Baixe arquivos e conteúdos que exigem e-mail para acesso</p>
           </div>

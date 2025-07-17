@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Shield, Lock, Eye, Trash2 } from 'lucide-react';
+import { Shield, Lock, Eye, Trash2, CheckCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const PrivacyNotice: React.FC = () => {
@@ -58,11 +58,14 @@ const PrivacyNotice: React.FC = () => {
         </div>
 
         <div className="mt-4 p-3 bg-white/60 rounded-lg border border-gray-200">
-          <p className="text-xs text-gray-700 leading-relaxed">
-            <strong>Aviso de Privacidade:</strong> Este serviço não armazena dados pessoais. 
-            Todos os e-mails são temporários e excluídos automaticamente. 
-            Use apenas para cadastros e testes legítimos.
-          </p>
+          <div className="flex items-start space-x-2">
+            <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+            <p className="text-xs text-gray-700 leading-relaxed">
+              <strong>Aviso de Privacidade:</strong> Este serviço não armazena dados pessoais. 
+              Todos os e-mails são temporários e excluídos automaticamente. 
+              Use apenas para cadastros e testes legítimos.
+            </p>
+          </div>
         </div>
       </CardContent>
     </Card>
