@@ -15,12 +15,16 @@ export default function GuiaCompletoEmailsTemporarios() {
         <div className="max-w-4xl mx-auto">
           {/* Botão Voltar */}
           <div className="mb-8">
-            <Link to="/blog">
+            <a
+              href="https://blog.mailtempfast.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Button variant="outline" className="flex items-center gap-2">
                 <ArrowLeft className="h-4 w-4" />
-                Voltar ao Blog
+                Visite nosso Blog
               </Button>
-            </Link>
+            </a>
           </div>
 
           {/* Header do Guia */}
