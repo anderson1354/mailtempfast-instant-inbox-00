@@ -1,27 +1,38 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Shield, Lock, AlertTriangle, CheckCircle, ArrowLeft } from "lucide-react";
+import { BookOpen, Shield, Lock, AlertTriangle, CheckCircle, Home, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 
 export default function GlossarioSegurancaDigital() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50">
       <Header />
       
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
-          {/* Botão Voltar */}
-          <div className="mb-8">
+          {/* Botões de Navegação */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-8">
+            <Link to="/">
+              <Button variant="outline" className="flex items-center gap-2 w-full sm:w-auto">
+                <Home className="h-4 w-4" />
+                Voltar à Página Principal
+              </Button>
+            </Link>
             <a
               href="https://blog.mailtempfast.com/"
               target="_blank"
               rel="noopener noreferrer"
+              className="w-full sm:w-auto"
             >
-              <Button variant="outline" className="flex items-center gap-2">
-                <ArrowLeft className="h-4 w-4" />
+              <Button className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+                <ExternalLink className="h-4 w-4" />
                 Visite nosso Blog
               </Button>
             </a>
