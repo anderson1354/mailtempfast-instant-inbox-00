@@ -10,6 +10,10 @@ import Blog from "./pages/Blog";
 import ComoUsar from "./pages/blog/ComoUsar";
 import EviteSpam from "./pages/blog/EviteSpam";
 import PorqueProteger from "./pages/blog/PorqueProteger";
+import ComoProtegerPhishing from "./pages/blog/ComoProtegerPhishing";
+import GuiaCompletoEmailsTemporarios from "./pages/guides/GuiaCompletoEmailsTemporarios";
+import FaqDetalhada from "./pages/faq/FaqDetalhada";
+import GlossarioSegurancaDigital from "./pages/glossary/GlossarioSegurancaDigital";
 
 const App = () => (
   <BrowserRouter>
@@ -23,6 +27,10 @@ const App = () => (
       <Route path="/blog/como-usar" element={<ComoUsar />} />
       <Route path="/blog/evite-spam" element={<EviteSpam />} />
       <Route path="/blog/por-que-proteger" element={<PorqueProteger />} />
+      <Route path="/blog/como-proteger-se-de-phishing" element={<ComoProtegerPhishing />} />
+      <Route path="/guias/guia-completo-emails-temporarios" element={<GuiaCompletoEmailsTemporarios />} />
+      <Route path="/faq" element={<FaqDetalhada />} />
+      <Route path="/glossario" element={<GlossarioSegurancaDigital />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   </BrowserRouter>

@@ -2,7 +2,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Mail, Shield, Zap, ArrowRight, Calendar } from "lucide-react";
+import { Mail, Shield, Zap, ArrowRight, Calendar, HelpCircle, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 
@@ -34,6 +34,48 @@ export default function Blog() {
       date: "1 de Junho de 2024",
       icon: Zap,
       color: "purple"
+    },
+    {
+      id: 4,
+      title: "Como Proteger-se de Golpes de Phishing",
+      intro: "Aprenda a usar e-mails temporários como uma ferramenta eficaz contra golpes de phishing e outras ameaças cibernéticas. Proteja-se dos criminosos digitais.",
+      slug: "como-proteger-se-de-phishing",
+      date: "16 de Julho de 2025",
+      icon: Shield,
+      color: "red"
+    }
+  ];
+
+  const guides = [
+    {
+      id: 5,
+      title: "Guia Completo: E-mails Temporários e Privacidade",
+      intro: "Um guia aprofundado sobre como e-mails temporários podem ser usados para proteger sua privacidade e segurança na internet. Tudo que você precisa saber.",
+      slug: "/guias/guia-completo-emails-temporarios",
+      date: "16 de Julho de 2025",
+      icon: BookOpen,
+      color: "indigo"
+    }
+  ];
+
+  const resources = [
+    {
+      id: 6,
+      title: "Perguntas Frequentes (FAQ)",
+      intro: "Encontre respostas detalhadas para as perguntas mais comuns sobre o MailTempFast, e-mails temporários e privacidade online. Esclarecimentos completos.",
+      slug: "/faq",
+      date: "16 de Julho de 2025",
+      icon: HelpCircle,
+      color: "purple"
+    },
+    {
+      id: 7,
+      title: "Glossário de Segurança Digital",
+      intro: "Um glossário abrangente de termos técnicos para ajudar você a entender o mundo da segurança digital. Aprenda a linguagem da cibersegurança.",
+      slug: "/glossario",
+      date: "16 de Julho de 2025",
+      icon: BookOpen,
+      color: "teal"
     }
   ];
 
@@ -53,10 +95,76 @@ export default function Blog() {
         icon: "text-purple-600",
         bg: "bg-purple-50", 
         button: "bg-purple-600 hover:bg-purple-700"
+      },
+      red: {
+        icon: "text-red-600",
+        bg: "bg-red-50", 
+        button: "bg-red-600 hover:bg-red-700"
+      },
+      indigo: {
+        icon: "text-indigo-600",
+        bg: "bg-indigo-50", 
+        button: "bg-indigo-600 hover:bg-indigo-700"
+      },
+      teal: {
+        icon: "text-teal-600",
+        bg: "bg-teal-50", 
+        button: "bg-teal-600 hover:bg-teal-700"
       }
     };
     return colorMap[color as keyof typeof colorMap] || colorMap.blue;
   };
+
+  const renderContentSection = (items: any[], title: string, description: string, basePath: string = "/blog") => (
+    <div className="mb-16">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold text-gray-800 mb-2">{title}</h2>
+        <p className="text-lg text-gray-600">{description}</p>
+      </div>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {items.map((item) => {
+          const colors = getColorClasses(item.color);
+          const IconComponent = item.icon;
+          const linkPath = item.slug.startsWith('/') ? item.slug : `${basePath}/${item.slug}`;
+          
+          return (
+            <Link key={item.id} to={linkPath} className="block">
+              <Card className="shadow-lg border-0 bg-white/90 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full hover:-translate-y-2 cursor-pointer">
+                <CardHeader className={`${colors.bg} rounded-t-lg`}>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2 bg-white rounded-full shadow-md">
+                      <IconComponent className={`h-6 w-6 ${colors.icon}`} />
+                    </div>
+                  </div>
+                  <CardTitle className="text-xl text-gray-800 leading-tight mb-3">
+                    {item.title}
+                  </CardTitle>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Calendar className="h-4 w-4" />
+                    <span>{item.date}</span>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-6 flex flex-col h-full">
+                  <p className="text-gray-700 leading-relaxed mb-6 flex-grow line-height-relaxed">
+                    {item.intro}
+                  </p>
+                  <div className="mt-auto">
+                    <Button 
+                      className={`w-full ${colors.button} text-white transition-all duration-300 group shadow-lg hover:shadow-xl transform hover:scale-105`}
+                      size="lg"
+                    >
+                      <span className="font-semibold">Ler Conteúdo Completo</span>
+                      <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-pink-50">
@@ -67,56 +175,22 @@ export default function Blog() {
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-              Dicas e Artigos sobre Privacidade Digital
+              Central de Conhecimento sobre Privacidade Digital
             </h1>
             <div className="w-24 h-1 bg-gradient-to-r from-orange-600 to-pink-600 mx-auto"></div>
             <p className="text-xl text-gray-600 mt-6">
-              Mantenha-se informado sobre segurança e privacidade online
+              Artigos, guias e recursos para proteger sua segurança online
             </p>
           </div>
 
-          {/* Articles Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            {articles.map((article) => {
-              const colors = getColorClasses(article.color);
-              const IconComponent = article.icon;
-              
-              return (
-                <Link key={article.id} to={`/blog/${article.slug}`} className="block">
-                  <Card className="shadow-lg border-0 bg-white/90 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full hover:-translate-y-2 cursor-pointer">
-                    <CardHeader className={`${colors.bg} rounded-t-lg`}>
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="p-2 bg-white rounded-full shadow-md">
-                          <IconComponent className={`h-6 w-6 ${colors.icon}`} />
-                        </div>
-                      </div>
-                      <CardTitle className="text-xl text-gray-800 leading-tight mb-3">
-                        {article.title}
-                      </CardTitle>
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <Calendar className="h-4 w-4" />
-                        <span>{article.date}</span>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="p-6 flex flex-col h-full">
-                      <p className="text-gray-700 leading-relaxed mb-6 flex-grow line-height-relaxed">
-                        {article.intro}
-                      </p>
-                      <div className="mt-auto">
-                        <Button 
-                          className={`w-full ${colors.button} text-white transition-all duration-300 group shadow-lg hover:shadow-xl transform hover:scale-105`}
-                          size="lg"
-                        >
-                          <span className="font-semibold">Ler Artigo Completo</span>
-                          <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              );
-            })}
-          </div>
+          {/* Artigos do Blog */}
+          {renderContentSection(articles, "Artigos do Blog", "Dicas práticas e tutoriais sobre segurança digital")}
+
+          {/* Guias Completos */}
+          {renderContentSection(guides, "Guias Completos", "Documentação detalhada para dominar a privacidade online", "")}
+
+          {/* Recursos */}
+          {renderContentSection(resources, "Recursos e Referências", "FAQ, glossários e materiais de apoio", "")}
 
           {/* Enhanced CTA Section com melhor responsividade */}
           <Card className="shadow-2xl border-0 bg-gradient-to-r from-orange-600 via-pink-600 to-red-600 text-white overflow-hidden relative">
@@ -185,15 +259,15 @@ export default function Blog() {
                   >
                     Página Inicial
                   </Link>
-  <a
-  href="https://blog.mailtempfast.com"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="block text-gray-300 hover:text-orange-400 transition-colors duration-300 hover:underline"
-  >
-   Blog
-      </a>
-           </div>
+                  <a
+                    href="https://blog.mailtempfast.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-gray-300 hover:text-orange-400 transition-colors duration-300 hover:underline"
+                  >
+                    Blog
+                  </a>
+                </div>
               </div>
               
               <div className="text-center">
