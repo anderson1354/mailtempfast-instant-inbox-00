@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { Mail, Shield, Clock, Zap, Users, Globe, CheckCircle, Award, Cpu, Eye, Server } from 'lucide-react';
+import { Mail, Shield, Clock, Zap, Users, Globe, CheckCircle, Award, Cpu, Eye, Server, Rocket, Lock, Gift, Monitor, Lightbulb } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { mailTmService } from '@/services/mailtm';
@@ -55,15 +56,19 @@ const MainHero = ({ onEmailGenerated }: MainHeroProps) => {
       {/* Hero principal */}
       <div className="mb-12">
         <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-          E-mail Temporário{' '}
-          <span className="text-blue-600">Instantâneo</span>{' '}
-          <span className="text-green-600">e Seguro</span>
+          Bem-vindo ao{' '}
+          <span className="text-blue-600">MailTempFast</span>{' '}
+          – Seu E-mail Temporário{' '}
+          <span className="text-green-600">Instantâneo</span>
         </h1>
-        <p className="text-lg sm:text-xl lg:text-2xl text-gray-700 mb-8 max-w-4xl mx-auto leading-relaxed px-4">
-          Proteja sua privacidade online com nossos e-mails temporários. 
-          Receba mensagens reais sem expor seu endereço pessoal a spam, 
-          vazamentos de dados ou golpes de phishing.
-        </p>
+        <div className="text-lg sm:text-xl lg:text-2xl text-gray-700 mb-8 max-w-4xl mx-auto leading-relaxed px-4 space-y-4">
+          <p>
+            O MailTempFast é a maneira mais rápida e segura de criar um e-mail temporário para proteger sua privacidade online.
+          </p>
+          <p>
+            Com ele, você recebe e-mails instantaneamente, sem precisar revelar seu endereço pessoal. Ideal para cadastros rápidos, testes de softwares, redes sociais e muito mais.
+          </p>
+        </div>
       </div>
 
       {/* Estatísticas de confiança */}
@@ -103,53 +108,58 @@ const MainHero = ({ onEmailGenerated }: MainHeroProps) => {
         </Button>
       </div>
 
-      {/* Features principais */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 px-4">
-        <div className="bg-white rounded-xl p-6 shadow-lg border border-blue-100 hover:shadow-xl transition-all duration-300 hover:transform hover:scale-105">
-          <div className="flex items-center justify-center w-14 h-14 bg-blue-100 rounded-xl mx-auto mb-4">
-            <Zap className="h-7 w-7 text-blue-600" />
+      {/* Por que usar o MailTempFast? */}
+      <div className="mb-12 px-4">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">
+          Por que usar o MailTempFast?
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="bg-white rounded-xl p-6 shadow-lg border border-blue-100 hover:shadow-xl transition-all duration-300 hover:transform hover:scale-105">
+            <div className="flex items-center justify-center w-14 h-14 bg-blue-100 rounded-xl mx-auto mb-4">
+              <Rocket className="h-7 w-7 text-blue-600" />
+            </div>
+            <h3 className="font-bold text-gray-900 mb-3 text-lg">Rápido</h3>
+            <p className="text-gray-600 text-sm leading-relaxed">
+              Seu e-mail fica pronto em segundos
+            </p>
           </div>
-          <h3 className="font-bold text-gray-900 mb-3 text-lg">Instantâneo</h3>
-          <p className="text-gray-600 text-sm leading-relaxed">
-            E-mails criados em segundos, prontos para uso imediato sem cadastro ou espera
-          </p>
-        </div>
 
-        <div className="bg-white rounded-xl p-6 shadow-lg border border-green-100 hover:shadow-xl transition-all duration-300 hover:transform hover:scale-105">
-          <div className="flex items-center justify-center w-14 h-14 bg-green-100 rounded-xl mx-auto mb-4">
-            <Shield className="h-7 w-7 text-green-600" />
+          <div className="bg-white rounded-xl p-6 shadow-lg border border-green-100 hover:shadow-xl transition-all duration-300 hover:transform hover:scale-105">
+            <div className="flex items-center justify-center w-14 h-14 bg-green-100 rounded-xl mx-auto mb-4">
+              <Lock className="h-7 w-7 text-green-600" />
+            </div>
+            <h3 className="font-bold text-gray-900 mb-3 text-lg">Seguro</h3>
+            <p className="text-gray-600 text-sm leading-relaxed">
+              Protege sua caixa de entrada contra spam e golpes
+            </p>
           </div>
-          <h3 className="font-bold text-gray-900 mb-3 text-lg">100% Seguro</h3>
-          <p className="text-gray-600 text-sm leading-relaxed">
-            SSL ativo, zero logs de atividade, dados completamente protegidos e privados
-          </p>
-        </div>
 
-        <div className="bg-white rounded-xl p-6 shadow-lg border border-purple-100 hover:shadow-xl transition-all duration-300 hover:transform hover:scale-105">
-          <div className="flex items-center justify-center w-14 h-14 bg-purple-100 rounded-xl mx-auto mb-4">
-            <Clock className="h-7 w-7 text-purple-600" />
+          <div className="bg-white rounded-xl p-6 shadow-lg border border-purple-100 hover:shadow-xl transition-all duration-300 hover:transform hover:scale-105">
+            <div className="flex items-center justify-center w-14 h-14 bg-purple-100 rounded-xl mx-auto mb-4">
+              <Gift className="h-7 w-7 text-purple-600" />
+            </div>
+            <h3 className="font-bold text-gray-900 mb-3 text-lg">Gratuito</h3>
+            <p className="text-gray-600 text-sm leading-relaxed">
+              Use sempre que precisar, sem limites
+            </p>
           </div>
-          <h3 className="font-bold text-gray-900 mb-3 text-lg">Auto-Exclusão</h3>
-          <p className="text-gray-600 text-sm leading-relaxed">
-            E-mails deletados automaticamente após 60 minutos, garantindo sua privacidade
-          </p>
-        </div>
 
-        <div className="bg-white rounded-xl p-6 shadow-lg border border-orange-100 hover:shadow-xl transition-all duration-300 hover:transform hover:scale-105">
-          <div className="flex items-center justify-center w-14 h-14 bg-orange-100 rounded-xl mx-auto mb-4">
-            <Mail className="h-7 w-7 text-orange-600" />
+          <div className="bg-white rounded-xl p-6 shadow-lg border border-orange-100 hover:shadow-xl transition-all duration-300 hover:transform hover:scale-105">
+            <div className="flex items-center justify-center w-14 h-14 bg-orange-100 rounded-xl mx-auto mb-4">
+              <Monitor className="h-7 w-7 text-orange-600" />
+            </div>
+            <h3 className="font-bold text-gray-900 mb-3 text-lg">Fácil</h3>
+            <p className="text-gray-600 text-sm leading-relaxed">
+              Funciona direto no navegador, sem cadastro
+            </p>
           </div>
-          <h3 className="font-bold text-gray-900 mb-3 text-lg">E-mails Reais</h3>
-          <p className="text-gray-600 text-sm leading-relaxed">
-            Receba mensagens reais de qualquer remetente, não simuladas ou falsas
-          </p>
         </div>
       </div>
 
-      {/* Seção de confiança e benefícios */}
+      {/* Como funciona? */}
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 mb-12 mx-4">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
-          Por que Escolher o MailTempFast?
+          Como funciona?
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
           <div className="flex items-start space-x-3">
@@ -157,8 +167,8 @@ const MainHero = ({ onEmailGenerated }: MainHeroProps) => {
               <CheckCircle className="h-5 w-5 text-green-600" />
             </div>
             <div>
-              <h4 className="font-semibold text-gray-900 mb-1">Proteção contra Spam</h4>
-              <p className="text-gray-600 text-sm">Mantenha sua caixa de entrada principal limpa e organizada</p>
+              <h4 className="font-semibold text-gray-900 mb-1">Gere um e-mail temporário</h4>
+              <p className="text-gray-600 text-sm">Com um clique, seu e-mail está pronto para uso</p>
             </div>
           </div>
           <div className="flex items-start space-x-3">
@@ -166,8 +176,8 @@ const MainHero = ({ onEmailGenerated }: MainHeroProps) => {
               <CheckCircle className="h-5 w-5 text-green-600" />
             </div>
             <div>
-              <h4 className="font-semibold text-gray-900 mb-1">Prevenção de Phishing</h4>
-              <p className="text-gray-600 text-sm">Reduza o risco de golpes direcionados ao seu e-mail pessoal</p>
+              <h4 className="font-semibold text-gray-900 mb-1">Use o endereço</h4>
+              <p className="text-gray-600 text-sm">Para se cadastrar onde quiser, com segurança</p>
             </div>
           </div>
           <div className="flex items-start space-x-3">
@@ -175,8 +185,8 @@ const MainHero = ({ onEmailGenerated }: MainHeroProps) => {
               <CheckCircle className="h-5 w-5 text-green-600" />
             </div>
             <div>
-              <h4 className="font-semibold text-gray-900 mb-1">Anonimato Completo</h4>
-              <p className="text-gray-600 text-sm">Navegue e cadastre-se sem revelar sua identidade real</p>
+              <h4 className="font-semibold text-gray-900 mb-1">Receba mensagens</h4>
+              <p className="text-gray-600 text-sm">Visualize e-mails em tempo real na nossa plataforma</p>
             </div>
           </div>
           <div className="flex items-start space-x-3">
@@ -184,11 +194,35 @@ const MainHero = ({ onEmailGenerated }: MainHeroProps) => {
               <CheckCircle className="h-5 w-5 text-green-600" />
             </div>
             <div>
-              <h4 className="font-semibold text-gray-900 mb-1">Sem Cadastro Necessário</h4>
-              <p className="text-gray-600 text-sm">Use imediatamente sem fornecer dados pessoais</p>
+              <h4 className="font-semibold text-gray-900 mb-1">Descarte quando quiser</h4>
+              <p className="text-gray-600 text-sm">O e-mail é excluído automaticamente após 60 minutos</p>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Dica sobre o Blog */}
+      <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-8 mb-12 mx-4 border border-yellow-200">
+        <div className="flex items-center justify-center mb-4">
+          <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center">
+            <Lightbulb className="h-8 w-8 text-yellow-600" />
+          </div>
+        </div>
+        <h3 className="text-2xl font-bold text-gray-900 mb-4">
+          Dica: Quer aprender mais sobre privacidade e segurança digital?
+        </h3>
+        <p className="text-gray-700 mb-6 text-lg">
+          Acesse nosso Blog do MailTempFast e descubra dicas e tutoriais exclusivos.
+        </p>
+        <Button 
+          asChild
+          size="lg"
+          className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-semibold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+        >
+          <a href="https://blog.mailtempfast.com/" target="_blank" rel="noopener noreferrer">
+            Visite Nosso Blog
+          </a>
+        </Button>
       </div>
 
       {/* Casos de uso */}
