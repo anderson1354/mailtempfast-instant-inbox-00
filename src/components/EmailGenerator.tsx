@@ -142,7 +142,7 @@ const EmailGenerator = ({ heroGeneratedEmail }: EmailGeneratorProps) => {
                 <div className="text-center space-y-4">
                   <p className="text-sm font-medium text-blue-700 mb-3">📧 Endereço Ativo</p>
                   <div className="bg-white border-2 border-blue-400 rounded-lg p-4 shadow-md">
-                    <p className="text-2xl font-semibold text-blue-800 break-all">
+                    <p className="text-lg font-semibold text-blue-800 break-all">
                       {currentEmail}
                     </p>
                   </div>
